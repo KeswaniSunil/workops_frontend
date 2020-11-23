@@ -1,0 +1,24 @@
+.container__cards{
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-column-gap: 30px;
+    grid-row-gap: 30px;
+}
+.container__cards__card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: azure !important;
+}
+.container__cards__card__imageContainer{
+    display: flex;
+    align-items: center;
+}
+.container__cards__card__image{
+    height:40px;
+    width: 40px;
+}
+.container__cards__card__content{
+    padding:5px !important; 
+}
