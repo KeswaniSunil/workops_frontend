@@ -54,7 +54,7 @@ const categories = [
   {
     id: 'Settings',
     children: [
-      { id: 'User Profile', icon: <SettingsIcon /> },
+      { id: 'Project Settings',route:"/projectsettings", icon: <SettingsIcon /> },
       { id: 'Help', icon: <TimerIcon /> },
       { id: 'Log out', icon: <PhonelinkSetupIcon /> },
     ],

@@ -3,6 +3,8 @@ import { Route, Redirect } from "react-router-dom";
 import Dashboard from './components/Dashboard.js';
 import Projects from './components/Projects.js';
 import Backlog from './components/Backlog.js';
+import ProjectSettings from './components/ProjectSettings';
+
  const PrivateRoutes = ({
     component: Component,
     ...rest
@@ -11,13 +13,14 @@ import Backlog from './components/Backlog.js';
         if(pathname==='/dashboard') return <Dashboard />
         else if(pathname==='/projects') return <Projects/>
         else if(pathname==="/backlog") return <Backlog />
+        else if(pathname==="/projectsettings") return <ProjectSettings />
   }
     return (        
         <Route
             {...rest}
             render={props => {
                 if (localStorage.getItem("token")) {
-                    console.log(props);
+                    // console.log(props);
                 return <Component {...props} >
                     {/* <Dashboard/> */}
                     {routeToComponentMapping(props.location.pathname)}

@@ -140,7 +140,7 @@ const styles = {
   main: {
     flex: 1,
     padding: theme.spacing(2, 2),
-    background: '#eaeff1',
+    background: 'white',
   },
   footer: {
     padding: theme.spacing(2),

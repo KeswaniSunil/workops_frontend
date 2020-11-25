@@ -45,6 +45,7 @@ function App() {
           <PrivateRoutes path="/dashboard" exact component={Paperbase} />
           <PrivateRoutes path="/projects" exact component={Paperbase} />
           <PrivateRoutes path="/backlog" exact component={Paperbase} />
+          <PrivateRoutes path="/projectsettings" exact component={Paperbase} />
           <Route path="/*" component={PageNotFound} />
         </Switch>
       </Router>      

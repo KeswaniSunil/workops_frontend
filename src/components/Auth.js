@@ -134,7 +134,7 @@ const Auth = ({mode,headerText,errorMessage,onSubmit}) => {
                             ?
                             <ul>
                                 <li> 
-                                    <Link to="/signin">Already have an Atlassian account? Sign in </Link>
+                                    <Link to="/signin">Already have an account? Sign in </Link>
                                 </li>
                             </ul>    
                             :

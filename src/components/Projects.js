@@ -28,12 +28,12 @@ const Projects = () => {
         <div class="container">
             <Breadcrumbs aria-label="breadcrumb">
                 <Link color="inherit" to="" >
-                    Material-UI
+                    Workops
                 </Link>
                 <Link color="inherit" to="" >
                     Core
                 </Link>
-                <Typography color="textPrimary">Breadcrumb</Typography>
+                <Typography color="textPrimary">Projects</Typography>
             </Breadcrumbs>
             <div className="container__cards">
                 <Card className={classes.root}>
