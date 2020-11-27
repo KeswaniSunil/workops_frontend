@@ -66,6 +66,49 @@
     margin-top: 20px;
 }
 
+.issuedetails__content__status_select{
+    border:none;
+}
+
+.issuedetails__content__status_select:focus{
+    outline: none;
+}
+
+.issuedetails__content__status option{
+}
+
+.issuedetails__content__status__option__review{
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: rgba(133, 133, 133, 0.5);
+    color: rgb(97, 97, 97);
+}
+
+.issuedetails__content__status__option__todo{
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: rgba(133, 133, 133, 0.5);
+    color: rgb(97, 97, 97);
+    
+    outline: 0px;
+}
+
+.issuedetails__content__status__option__inprogress{
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: rgba(1, 132, 255, 0.5);
+    color: darkblue;
+    outline: 0px;
+}
+
+.issuedetails__content__status__option__done{
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: rgba(1, 255, 44, 0.5);
+    color: darkgreen;
+    outline: 0px;
+}
+
 .issuedetails__content__details__container{
     margin-top: 20px;
     display: flex;

@@ -44,6 +44,7 @@ const categories = [
     id: 'Main',
     children: [
       { id: 'Backlog',route:"/backlog", icon: <PeopleIcon />},
+      { id: 'AddIssue',route:"/addissue", icon: <PeopleIcon />},
       { id: 'IssueDetails',route:"/issuedetails/:id", icon: <PeopleIcon />},
       { id: 'Components', icon: <DnsRoundedIcon /> },
       { id: 'Active Sprints', icon: <PublicIcon /> },

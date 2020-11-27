@@ -5,7 +5,7 @@ import Projects from './components/Projects.js';
 import Backlog from './components/Backlog.js';
 import ProjectSettings from './components/ProjectSettings';
 import IssueDetails from './components/IssueDetails';
-
+import AddIssue from './components/AddIssue';
  const PrivateRoutes = ({
     component: Component,
     ...rest
@@ -17,6 +17,7 @@ import IssueDetails from './components/IssueDetails';
         else if(pathname==="/backlog") return <Backlog />
         else if(pathname==="/projectsettings") return <ProjectSettings />
         else if(pathname==="/issuedetails/:id") return <IssueDetails/>
+        else if(pathname==="/addissue") return <AddIssue/>
     }
     return (        
         <Route
