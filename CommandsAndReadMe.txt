@@ -15,6 +15,9 @@ Click on "Manage Windows Credentials".
 Delete any credentials related to Git or GitHub.
 Once you deleted all then try to clone again.
 
+<<<<<<< HEAD
+Extra:- To change origin ,git remote set-url origin newRepoUrl ,where newRepoUrl=https://github.com/{userName}/{repoName}.git
+=======
 Extra:- To change origin ,git remote set-url origin newRepoUrl ,where newRepoUrl=https://github.com/{userName}/{repoName}.git
 
 -To run the project: npm start
@@ -38,3 +41,4 @@ Also make sure you dont put className that collides with bootstarp class like fo
 -To install react router:- 'npm install react-router-dom'
 
 -npm install react-redux redux
+>>>>>>> 9400c89e37a742bcb49daeedaf9595461db773ee

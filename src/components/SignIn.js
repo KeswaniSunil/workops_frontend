@@ -3,7 +3,7 @@ import Auth from './Auth';
 import {signin,clearErrOnPageSwicth} from "../actions/AuthActions"
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
-import { withRouter } from 'react-router-dom'
+// import { withRouter } from 'react-router-dom'
 
 const SignIn = (props) => {
     const dispatch = useDispatch();
