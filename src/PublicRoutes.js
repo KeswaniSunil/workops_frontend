@@ -14,6 +14,7 @@ const PublicRoutes = ({
                 if (!localStorage.getItem("token")) {
                 return <Component {...props} />;
                 } else {
+                    alert("Already Signed In");
                 return (
                     <Redirect
                     to="/dashboard"

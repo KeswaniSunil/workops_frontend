@@ -1,6 +1,8 @@
-import React from 'react';
+import React,{useState} from 'react';
 import "../styles/CustomBreadcrumb.css";
-import "../styles/Backlog.css";
+import "../styles/Modal.css";
+
+import "../styles/Components.css";
 import PropTypes from 'prop-types';
 // import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -23,84 +25,25 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-// function createData(name, calories, fat, carbs, protein) {
-//     return { name, calories, fat, carbs, protein };
-//   }
-  
-//   const rows = [
-//     createData('Cupcake', 305, 3.7, 67, 4.3),
-//     createData('Donut', 452, 25.0, 51, 4.9),
-//     createData('Eclair', 262, 16.0, 24, 6.0),
-//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//     createData('Gingerbread', 356, 16.0, 49, 3.9),
-//     createData('Honeycomb', 408, 3.2, 87, 6.5),
-//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//     createData('Jelly Bean', 375, 0.0, 94, 0.0),
-//     createData('KitKat', 518, 26.0, 65, 7.0),
-//     createData('Lollipop', 392, 0.2, 98, 0.0),
-//     createData('Marshmallow', 318, 0, 81, 2.0),
-//     createData('Nougat', 360, 19.0, 9, 37.0),
-//     createData('Oreo', 437, 18.0, 63, 4.0),
-//   ];
+import Modal from 'react-bootstrap/Modal'
+import {Button} from 'react-bootstrap';
 
+import AddEditComponent from './AddEditComponent.js';
 
 const rows=[
     {
-        type:"Story",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
-        desc:"Issue 1 Description goes here",
-        key:"WOKS-1",
-        status:"TO DO",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/medium.svg"
+        name:"Component 1",
+        desc:"Component 1 Description goes here",
+        lead:"Dummy Lead 1",
+        assignee:"Dummy Assignee 1"
     },
     {
-        type:"Task",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10318&avatarType=issuetype",
-        desc:"Issue 2 Description goes here",
-        key:"WOKS-2",
-        status:"In Progress",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/low.svg"
+        name:"Component 2",
+        desc:"Component 2 Description goes here",
+        lead:"Dummy Lead 2",
+        assignee:"Dummy Assignee 2"
     },
-    {
-        type:"Sub Task",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype",
-        desc:"Issue 3 Description goes here",
-        key:"WOKS-3",
-        status:"Done",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/lowest.svg"
-    },
-    {
-        type:"Bug",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10303&avatarType=issuetype",
-        desc:"Issue 4 Description goes here",
-        key:"WOKS-4",
-        status:"TO DO",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/high.svg"
-    },
-    {
-        type:"Epic",
-        typeIcon:"https://dreamcompany98.atlassian.net/images/icons/issuetypes/epic.svg",
-        desc:"Issue 5 Description goes here",
-        key:"WOKS-5",
-        status:"Done",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/highest.svg"
-    },
-    {
-        type:"Sub Task",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype",
-        desc:"Issue 6 Description goes here",
-        key:"WOKS-6",
-        status:"Done",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/lowest.svg"
-    },
-    {
-        type:"Story",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
-        desc:"Issue 7 Description goes here",
-        key:"WOKS-7",
-        status:"TO DO",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/medium.svg"
-    },
+
 ]
   
   function descendingComparator(a, b, orderBy) {
@@ -130,11 +73,10 @@ const rows=[
   }
   
   const headCells = [
-    { id: 'type', numeric: false, disablePadding: true, label: 'Type' ,width:"10%"},
+    { id: 'name', numeric: false, disablePadding: true, label: 'Name' ,width:"10%"},
     { id: 'desc', numeric: false, disablePadding: true, label: 'Description',width:"40%" },
-    { id: 'key', numeric: true, disablePadding: false, label: 'key',width:"10%" },
-    { id: 'status', numeric: true, disablePadding: false, label: 'Status',width:"20%" },
-    { id: 'priority', numeric: true, disablePadding: false, label: 'Priority',width:"10%" }
+    { id: 'lead', numeric: true, disablePadding: false, label: 'Component Lead',width:"20%" },
+    { id: 'assignee', numeric: true, disablePadding: false, label: 'Default Assignee',width:"20%" }
   ];
   
   function EnhancedTableHead(props) {
@@ -144,9 +86,9 @@ const rows=[
     };
   
     return (
-      <TableHead className="backlog__content__table__header">
-        <TableRow className="backlog__content__table__header__cell">
-          <TableCell padding="checkbox">
+      <TableHead className="components__content__table__header">
+        <TableRow className="components__content__table__header__row">
+          <TableCell padding="checkbox" >
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={rowCount > 0 && numSelected === rowCount}
@@ -262,16 +204,9 @@ const rows=[
       width: 1,
     },
   }));
-  
-//   export default function EnhancedTable() {
 
-  
-//     return (
-      
-//     );
-//   }
 
-const Backlog = () => {
+const Components = () => {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -332,24 +267,28 @@ const Backlog = () => {
   
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     return (
-        <div className="backlog">
-            <div className="backlog__header">
+        <div className="components">
+            <div className="components__header">
                 <div className="custombreadcrumb">
                     Projects
                     <span className="custombreadcrumb__forwardslash">/</span>
                     Tracker
                     <span className="custombreadcrumb__forwardslash">/</span>
-                    Backlogs
+                    Components
                 </div>
-                <h1 className="backlog__header__title">
-                    Project Backlogs
+                <h1 className="components__header__title">
+                    Project components
                 </h1>
             </div>
-            <div className="backlog__content">
-                <div className="backlog__content__addbacklog">
+            <div className="components__content">
+                <div className="components__content__addcomponent">
                     <div>
-                        <button type="button">
+                        <button type="button" onClick={handleShow}>
                             Create New
                         </button>
                     </div>
@@ -377,17 +316,17 @@ const Backlog = () => {
                             {stableSort(rows, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, index) => {
-                                const isItemSelected = isSelected(row.key);
+                                const isItemSelected = isSelected(row.name);
                                 const labelId = `enhanced-table-checkbox-${index}`;
             
                                 return (
                                 <TableRow
                                     hover
-                                    onClick={(event) => handleClick(event, row.key)}
+                                    onClick={(event) => handleClick(event, row.name)}
                                     role="checkbox"
                                     aria-checked={isItemSelected}
                                     tabIndex={-1}
-                                    key={row.key}
+                                    key={row.name}
                                     selected={isItemSelected}
                                 >
                                     <TableCell padding="checkbox">
@@ -396,17 +335,13 @@ const Backlog = () => {
                                             inputProps={{ 'aria-labelledby': labelId }}
                                         />
                                     </TableCell>
-                                    <TableCell component="th" id={labelId} scope="row" padding="none"
-                                        // style={{display:"flex",alignItems:"center"}}
-                                    >
-                                        <img src={row.typeIcon} style={{paddingRight:5}}/>
-                                        <span>{row.type}</span>
+                                    <TableCell component="th" id={labelId} scope="row" padding="none">
+                                        {row.name}
                                     </TableCell>
                                     <TableCell align="left">{row.desc}</TableCell>
-                                    <TableCell align="left">{row.key}</TableCell>
-                                    <TableCell align="left">{row.status}</TableCell>
-                                    <TableCell align="center">
-                                        <img src={row.priority} height="20"/>
+                                    <TableCell align="left">{row.lead}</TableCell>
+                                    <TableCell align="left">
+                                        {row.assignee}
                                     </TableCell>
                                 </TableRow>
                                 );
@@ -420,7 +355,7 @@ const Backlog = () => {
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        className="backlog__content__table__pagination"
+                        className="components__content__table__pagination"
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
                         count={rows.length}
@@ -436,8 +371,34 @@ const Backlog = () => {
                     />
                 </div>
             </div>
+            <div>
+                <Modal
+                    show={show}
+                    onHide={handleClose}
+                    backdrop="static"
+                    keyboard={false}
+                    // size="lg"
+                    // aria-labelledby="contained-modal-title-vcenter"
+                    // centered
+                    centered
+                    // animation={true}
+                >
+                    <Modal.Header closeButton >
+                    <Modal.Title>Add Component</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                    <AddEditComponent onHandleClose={handleClose}/>
+                    </Modal.Body>
+                    {/* <Modal.Footer>
+                    <Button style={{width:"15%"}} variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button style={{width:"25%"}} variant="primary">Save Changes</Button>
+                    </Modal.Footer> */}
+                </Modal>
+            </div>
         </div>
     );
 }
 
-export default Backlog;
+export default Components;

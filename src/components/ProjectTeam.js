@@ -1,8 +1,8 @@
 import React from 'react';
 import "../styles/CustomBreadcrumb.css";
-import "../styles/Backlog.css";
+import "../styles/ProjectTeam.css";
 import PropTypes from 'prop-types';
-// import clsx from 'clsx';
+
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -23,83 +23,42 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-// function createData(name, calories, fat, carbs, protein) {
-//     return { name, calories, fat, carbs, protein };
-//   }
-  
-//   const rows = [
-//     createData('Cupcake', 305, 3.7, 67, 4.3),
-//     createData('Donut', 452, 25.0, 51, 4.9),
-//     createData('Eclair', 262, 16.0, 24, 6.0),
-//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//     createData('Gingerbread', 356, 16.0, 49, 3.9),
-//     createData('Honeycomb', 408, 3.2, 87, 6.5),
-//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//     createData('Jelly Bean', 375, 0.0, 94, 0.0),
-//     createData('KitKat', 518, 26.0, 65, 7.0),
-//     createData('Lollipop', 392, 0.2, 98, 0.0),
-//     createData('Marshmallow', 318, 0, 81, 2.0),
-//     createData('Nougat', 360, 19.0, 9, 37.0),
-//     createData('Oreo', 437, 18.0, 63, 4.0),
-//   ];
-
-
 const rows=[
     {
-        type:"Story",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
-        desc:"Issue 1 Description goes here",
-        key:"WOKS-1",
-        status:"TO DO",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/medium.svg"
+        name:"Dummy Name 1",
+        email:"Dummy1@gmail.com",
+        team:"Frontend",
+        role:"Owner"
     },
     {
-        type:"Task",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10318&avatarType=issuetype",
-        desc:"Issue 2 Description goes here",
-        key:"WOKS-2",
-        status:"In Progress",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/low.svg"
+        name:"Dummy Name 2",
+        email:"Dummy2@gmail.com",
+        team:"Backend",
+        role:"Basic"
     },
     {
-        type:"Sub Task",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype",
-        desc:"Issue 3 Description goes here",
-        key:"WOKS-3",
-        status:"Done",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/lowest.svg"
+        name:"Dummy Name 3",
+        email:"Dummy3@gmail.com",
+        team:"DevOps",
+        role:"Basic"
     },
     {
-        type:"Bug",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10303&avatarType=issuetype",
-        desc:"Issue 4 Description goes here",
-        key:"WOKS-4",
-        status:"TO DO",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/high.svg"
+        name:"Dummy Name 4",
+        email:"Dummy4@gmail.com",
+        team:"Frontend",
+        role:"Basic"
     },
     {
-        type:"Epic",
-        typeIcon:"https://dreamcompany98.atlassian.net/images/icons/issuetypes/epic.svg",
-        desc:"Issue 5 Description goes here",
-        key:"WOKS-5",
-        status:"Done",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/highest.svg"
+        name:"Dummy Name 5",
+        email:"Dummy5@gmail.com",
+        team:"QA",
+        role:"Basic"
     },
     {
-        type:"Sub Task",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype",
-        desc:"Issue 6 Description goes here",
-        key:"WOKS-6",
-        status:"Done",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/lowest.svg"
-    },
-    {
-        type:"Story",
-        typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
-        desc:"Issue 7 Description goes here",
-        key:"WOKS-7",
-        status:"TO DO",
-        priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/medium.svg"
+        name:"Dummy Name 6",
+        email:"Dummy6@gmail.com",
+        team:"Backend",
+        role:"Basic"
     },
 ]
   
@@ -130,11 +89,10 @@ const rows=[
   }
   
   const headCells = [
-    { id: 'type', numeric: false, disablePadding: true, label: 'Type' ,width:"10%"},
-    { id: 'desc', numeric: false, disablePadding: true, label: 'Description',width:"40%" },
-    { id: 'key', numeric: true, disablePadding: false, label: 'key',width:"10%" },
-    { id: 'status', numeric: true, disablePadding: false, label: 'Status',width:"20%" },
-    { id: 'priority', numeric: true, disablePadding: false, label: 'Priority',width:"10%" }
+    { id: 'name', numeric: false, disablePadding: true, label: 'Name' ,width:"30%"},
+    { id: 'email', numeric: false, disablePadding: true, label: 'Email',width:"30%" },
+    { id: 'team', numeric: true, disablePadding: false, label: 'Team',width:"20%" },
+    { id: 'role', numeric: true, disablePadding: false, label: 'Role',width:"10%" },
   ];
   
   function EnhancedTableHead(props) {
@@ -144,8 +102,8 @@ const rows=[
     };
   
     return (
-      <TableHead className="backlog__content__table__header">
-        <TableRow className="backlog__content__table__header__cell">
+      <TableHead className="projectteam__content__table__header">
+        <TableRow className="projectteam__content__table__header__cell">
           <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -211,8 +169,8 @@ const rows=[
       flex: '1 1 100%',
     },
   }));
-  
-  const EnhancedTableToolbar = (props) => {
+
+const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected } = props;
   
@@ -238,8 +196,8 @@ const rows=[
   EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
   };
-  
-  const useStyles = makeStyles((theme) => ({
+
+const useStyles = makeStyles((theme) => ({
     root: {
       width: '100%',
     },
@@ -262,16 +220,8 @@ const rows=[
       width: 1,
     },
   }));
-  
-//   export default function EnhancedTable() {
 
-  
-//     return (
-      
-//     );
-//   }
-
-const Backlog = () => {
+const ProjectTeam = () => {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -279,78 +229,76 @@ const Backlog = () => {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  
     const handleRequestSort = (event, property) => {
-      const isAsc = orderBy === property && order === 'asc';
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(property);
-    };
-  
-    const handleSelectAllClick = (event) => {
-      if (event.target.checked) {
-        const newSelecteds = rows.map((n) => n.name);
-        setSelected(newSelecteds);
-        return;
-      }
-      setSelected([]);
-    };
-  
-    const handleClick = (event, name) => {
-      const selectedIndex = selected.indexOf(name);
-      let newSelected = [];
-  
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, name);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1),
-        );
-      }
-  
-      setSelected(newSelected);
-    };
-  
-    const handleChangePage = (event, newPage) => {
-      setPage(newPage);
-    };
-  
-    const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      setPage(0);
-    };
-  
-    const handleChangeDense = (event) => {
-      setDense(event.target.checked);
-    };
-  
-    const isSelected = (name) => selected.indexOf(name) !== -1;
-  
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+      };
+    
+      const handleSelectAllClick = (event) => {
+        if (event.target.checked) {
+          const newSelecteds = rows.map((n) => n.name);
+          setSelected(newSelecteds);
+          return;
+        }
+        setSelected([]);
+      };
+    
+      const handleClick = (event, name) => {
+        const selectedIndex = selected.indexOf(name);
+        let newSelected = [];
+    
+        if (selectedIndex === -1) {
+          newSelected = newSelected.concat(selected, name);
+        } else if (selectedIndex === 0) {
+          newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+          newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+          newSelected = newSelected.concat(
+            selected.slice(0, selectedIndex),
+            selected.slice(selectedIndex + 1),
+          );
+        }
+    
+        setSelected(newSelected);
+      };
+    
+      const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+      };
+    
+      const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+      };
+    
+      const handleChangeDense = (event) => {
+        setDense(event.target.checked);
+      };
+    
+      const isSelected = (name) => selected.indexOf(name) !== -1;
+    
+      const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
     return (
-        <div className="backlog">
-            <div className="backlog__header">
+        <div className="projectteam">
+            <div className="projectteam__header">
                 <div className="custombreadcrumb">
                     Projects
                     <span className="custombreadcrumb__forwardslash">/</span>
                     Tracker
                     <span className="custombreadcrumb__forwardslash">/</span>
-                    Backlogs
+                    Team
                 </div>
-                <h1 className="backlog__header__title">
-                    Project Backlogs
+                <h1 className="projectteam__header__title">
+                    Project Team
                 </h1>
             </div>
-            <div className="backlog__content">
-                <div className="backlog__content__addbacklog">
+            <div className="projectteam__content">
+                <div className="projectteam__content__addteammember">
                     <div>
                         <button type="button">
-                            Create New
+                            Add New
                         </button>
                     </div>
                 </div>
@@ -377,17 +325,17 @@ const Backlog = () => {
                             {stableSort(rows, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, index) => {
-                                const isItemSelected = isSelected(row.key);
+                                const isItemSelected = isSelected(row.email);
                                 const labelId = `enhanced-table-checkbox-${index}`;
             
                                 return (
                                 <TableRow
                                     hover
-                                    onClick={(event) => handleClick(event, row.key)}
+                                    onClick={(event) => handleClick(event, row.email)}
                                     role="checkbox"
                                     aria-checked={isItemSelected}
                                     tabIndex={-1}
-                                    key={row.key}
+                                    key={row.email}
                                     selected={isItemSelected}
                                 >
                                     <TableCell padding="checkbox">
@@ -397,17 +345,12 @@ const Backlog = () => {
                                         />
                                     </TableCell>
                                     <TableCell component="th" id={labelId} scope="row" padding="none"
-                                        // style={{display:"flex",alignItems:"center"}}
                                     >
-                                        <img src={row.typeIcon} style={{paddingRight:5}}/>
-                                        <span>{row.type}</span>
+                                    {row.name}
                                     </TableCell>
-                                    <TableCell align="left">{row.desc}</TableCell>
-                                    <TableCell align="left">{row.key}</TableCell>
-                                    <TableCell align="left">{row.status}</TableCell>
-                                    <TableCell align="center">
-                                        <img src={row.priority} height="20"/>
-                                    </TableCell>
+                                    <TableCell align="left">{row.email}</TableCell>
+                                    <TableCell align="left">{row.team}</TableCell>
+                                    <TableCell align="left">{row.role}</TableCell>
                                 </TableRow>
                                 );
                             })}
@@ -420,7 +363,7 @@ const Backlog = () => {
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        className="backlog__content__table__pagination"
+                        className="projectteam__content__table__pagination"
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
                         count={rows.length}
@@ -440,4 +383,4 @@ const Backlog = () => {
     );
 }
 
-export default Backlog;
+export default ProjectTeam;

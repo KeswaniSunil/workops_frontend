@@ -44,9 +44,9 @@ const categories = [
     id: 'Main',
     children: [
       { id: 'Backlog',route:"/backlog", icon: <PeopleIcon />},
-      { id: 'Components', icon: <DnsRoundedIcon /> },
+      { id: 'Components',route:"/components", icon: <DnsRoundedIcon /> },
       { id: 'Active Sprints', icon: <PublicIcon /> },
-      { id: 'Project Team ', icon: <PermMediaOutlinedIcon /> },
+      { id: 'Project Team ',route:"/projectteam", icon: <PermMediaOutlinedIcon /> },
       { id: 'Functions', icon: <SettingsEthernetIcon /> },
       { id: 'Reports', icon: <SettingsInputComponentIcon /> },
     ],
@@ -55,16 +55,16 @@ const categories = [
     id: 'Settings',
     children: [
       { id: 'Project Settings',route:"/projectsettings", icon: <SettingsIcon /> },
-      { id: 'Help', icon: <TimerIcon /> },
-      { id: 'Log out', icon: <PhonelinkSetupIcon /> },
+      // { id: 'Help', icon: <TimerIcon /> },
+      { id: 'Log out',route:"/logout", icon: <PhonelinkSetupIcon /> },
     ],
   },
 ];
 
 const styles = (theme) => ({
   categoryHeader: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
   },
   categoryHeaderPrimary: {
     color: theme.palette.common.white,
@@ -106,7 +106,7 @@ function Navigator(props) {
   const { classes, ...other } = props;
   const [active,setActive]=useState("Dashboard");
   return (
-    <Drawer variant="permanent" {...other}>
+    <Drawer variant="permanent" {...other} style={{overflow: "hidden"}}>
       <List disablePadding>
       <ListItem className={clsx( classes.item, classes.itemCategory,classes.firebase)}>
         <ListItemText
@@ -117,7 +117,22 @@ function Navigator(props) {
             Workops
           </ListItemText>
         </ListItem>
-        
+        <div
+          className={clsx(classes.item,classes.itemCategory)}
+          style={{height:"10%",display:"flex",alignItems:"center"}}
+        >
+          <span className={classes.itemIcon} style={{marginLeft:"5px"}}>
+            <img src="/images/projectIcon1.png" height="30" style={{borderRadius:"5px"}}/>
+          </span>
+          <div
+            classes={{
+              primary: classes.itemPrimary,
+            }}
+          >
+            <h5 style={{marginBottom:0}}>Tracker</h5>
+            <span style={{fontSize:"12px"}}>Key: ZG20191208</span>    
+          </div>
+        </div>
         {head.map(({ id, children }) => (
           <React.Fragment key={id}>
             {children.map(({ id: childId,route, icon}) => (

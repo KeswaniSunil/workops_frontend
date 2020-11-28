@@ -5,17 +5,33 @@ import {Form ,Col , Button  } from 'react-bootstrap';
 import {useDispatch} from 'react-redux';
 
 
-const Auth = ({mode,headerText,errorMessage,onSubmit}) => {
+const Auth = ({mode,headerText,errorMessage,onSubmit,history}) => {
     const dispatch = useDispatch();
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
-    let history = useHistory();
+    // let history = useHistory();
     const sendInfo=async (e)=>{
         e.preventDefault();
-        // console.log(email+" "+password);
-        // setInput("");
-        await onSubmit(email,password,dispatch);
         
+        //Way 1:
+        // let res=await onSubmit(email,password,dispatch);
+        // if(res){
+        //     history.push("/dashboard");
+        // }
+
+        //way 2:
+        onSubmit(email,password,dispatch)
+        .then(res=>{
+            if(res){
+                //option 1:
+                // window.location = "/signin"
+
+                //Option 2:
+                 history.push("/dashboard");
+
+                //option 3 isto use useHistory() hook
+            }
+        });
     }
     return (
             <div className="auth">
@@ -59,7 +75,7 @@ const Auth = ({mode,headerText,errorMessage,onSubmit}) => {
                                     <Form.Control 
                                         placeholder="Create Password"
                                         name="description"
-                                        type="text"
+                                        type="password"
                                         value={password}
                                         onChange={(e)=>{setPassword(e.target.value)}}
                                     />
@@ -83,7 +99,7 @@ const Auth = ({mode,headerText,errorMessage,onSubmit}) => {
                                     <Form.Control 
                                         placeholder="Enter password"
                                         name="password"
-                                        type="text"
+                                        type="password"
                                         value={password}
                                         onChange={(e)=>{setPassword(e.target.value)}}
                                     />
@@ -93,14 +109,12 @@ const Auth = ({mode,headerText,errorMessage,onSubmit}) => {
 
                             <Form.Row>
                                 <Form.Group as={Col}>
-                                    <Link to="/dashboard">
-                                        <Button 
-                                            variant="primary"
-                                            type="submit"
-                                            // onClick={()=>onSubmit(email,password)}
-                                            onClick={sendInfo}
-                                        >Continue</Button>
-                                    </Link>
+                                    <Button 
+                                        variant="primary"
+                                        type="submit"
+                                        // onClick={()=>onSubmit(email,password)}
+                                        onClick={sendInfo}
+                                    >Continue</Button>
                                 </Form.Group>
                             </Form.Row>
                         </>

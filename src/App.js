@@ -8,6 +8,7 @@ import Paperbase from './components/Paperbase.js';
 import Dashboard from './components/Dashboard.js';
 import PrivateRoutes from "./PrivateRoutes.js"
 import PublicRoutes from "./PublicRoutes.js"
+import Logout from './components/Logout.js';
 
 function App() {
 
@@ -46,7 +47,11 @@ function App() {
           <PrivateRoutes path="/projects" exact component={Paperbase} />
           <PrivateRoutes path="/backlog" exact component={Paperbase} />
           <PrivateRoutes path="/projectsettings" exact component={Paperbase} />
-          <Route path="/*" component={PageNotFound} />
+          <PrivateRoutes path="/projectteam" exact component={Paperbase} />
+          <PrivateRoutes path="/createproject" exact component={Paperbase} />
+          <PrivateRoutes path="/components" exact component={Paperbase} />
+          <Route path="/logout" exact  component={Logout} />
+          <Route path="/*" />
         </Switch>
       </Router>      
     </div>

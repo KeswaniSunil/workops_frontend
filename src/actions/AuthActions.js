@@ -38,9 +38,11 @@ export const signup=async (email,password,dispatch)=>{
         dispatch({type:actionTypes.SIGNUP_SIGNIN,payload:response.data.token});
         // console.log(response);
         // <Navigate path="/dashboard"/>
+        return true;
     } catch (error) {
         // console.log("Err= "+error.response.data.error);
         dispatch({type:actionTypes.ERROR,payload:error.response.data.error});
+        return false;
     }
 };
 
@@ -53,13 +55,15 @@ export const signin=async (email,password,dispatch)=>{
         // console.log("called 1");        
         await localStorage.setItem("token",response.data.token);
         dispatch({type:actionTypes.SIGNUP_SIGNIN,payload:response.data.token});
+        return true;
     } catch (error) {
         // console.log("Here");
         dispatch({type:actionTypes.ERROR,payload:error.response.data.error});
+        return false;
     }
 };
 
-export const signout=(dispatch)=>async ()=>{
+export const signout=async (dispatch)=>{
     await localStorage.removeItem("token");
     dispatch({type:actionTypes.SIGNOUT});
 };

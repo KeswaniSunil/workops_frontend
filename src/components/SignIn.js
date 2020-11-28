@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 import { withRouter } from 'react-router-dom'
 
-const SignIn = () => {
+const SignIn = (props) => {
     const dispatch = useDispatch();
     useEffect(()=>{
         // console.log("signin");
@@ -33,7 +33,7 @@ const SignIn = () => {
 
                 //Way 3:- keeping dispatch on Auth.js
                 onSubmit={signin}
-
+                history={props.history}
             />
         </>
     );

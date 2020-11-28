@@ -3,7 +3,7 @@ import Auth from './Auth';
 import {signup,clearErrOnPageSwicth} from "../actions/AuthActions"
 import {useSelector,useDispatch} from 'react-redux';
 
-const SignUp = () => {
+const SignUp = (props) => {
     const dispatch = useDispatch();
     useEffect(()=>{
         // console.log("signup");
@@ -19,7 +19,7 @@ const SignUp = () => {
             //onSubmit={({email,password})=>{signin({email,password})}} or you can provide directly
             //function reference so whatever args provided from AuthFrom to onSubmit() will bve passed to signin()
             onSubmit={signup}
-
+            history={props.history}
         />
     );
 }
