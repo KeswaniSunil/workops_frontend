@@ -1,8 +1,56 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import "../styles/AddEditProject.css";
-
+import WorkOpsApi from "../api/WorkOpsBackend";
 
 const AddEditProject = ({id}) => {
+    //Way 1:
+    // const [name,setName]=useState("");
+    // const [key,setKey]=useState("");
+    // const [desc,setDesc]=useState("");
+    
+    //Way 2:
+    let initialprojecstate={
+        name:"",
+        projectkey:"",
+        description:""
+    }
+
+    const [project,setProject]=useState(initialprojecstate);
+    useEffect(()=>{
+        if(id!==undefined){
+            WorkOpsApi.get("/api/projects/"+id)
+            .then(res=>{
+                setProject(res.data);
+            })
+        }
+    },[]);
+    const handleSubmit=(e)=>{
+        e.preventDefault();
+        if(id===undefined){
+            WorkOpsApi.post("/api/projects",{project})
+            .then(res=>{
+                if(res){
+                    console.log(res);
+                  alert("Project Added");
+                }
+            })
+            .catch(e=>{
+                alert("Error");
+            })
+        }
+        else{
+            WorkOpsApi.put("/api/projects",{project})
+            .then(res=>{
+                if(res){
+                    console.log(res);
+                  alert("Project Added");
+                }
+            })
+            .catch(e=>{
+                alert("Error");
+            })
+        }
+    }
     return (
         <div>
             <form >
@@ -10,16 +58,18 @@ const AddEditProject = ({id}) => {
                     <label>
                         Name
                     </label>
-                    <input type="text" value={id && "Tracker Mobile App"}
+                    <input type="text" value={id && project.name}
                     //  placeholder="Enter name"
+                        onChange={(e)=>{setProject({...project,name:e.target.value})}}
                      />
                 </div>
                 <div className="field-group">
                     <label>
                         Key
                     </label>
-                    <input type="text" value={id && "ZG20191208"} 
-                    // placeholder="Enter Key" 
+                    <input type="text" value={id && project.projectkey} 
+                        onChange={(e)=>{setProject({...project,projectkey:e.target.value})}}
+// placeholder="Enter Key" 
                     style={{width:"30%"}}/>
                 </div>
                 <div className="field-group">
@@ -36,8 +86,9 @@ const AddEditProject = ({id}) => {
                     </label>
                     <textarea rows="4" cols="50" style={{width:"80%"}} 
                     // placeholder="enter description"
+                    value={id && project.description}
+                    onChange={(e)=>{setProject({...project,description:e.target.value})}}
                     >
-                        {id && 'This is my Project Description..This is my Project Description..This is my Project Description..'}
                     </textarea>
                 </div>
                 <div className="field-group">
@@ -51,7 +102,7 @@ const AddEditProject = ({id}) => {
                     </select>
                 </div>
                 <div className="buttons_container">
-                    <input type="submit" value="Save Details" className="submitbutton"/>
+                    <input type="submit" value="Save Details" className="submitbutton" onClick={handleSubmit}/>
                     <a href="">Cancel</a>
                 </div>
             </form>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -7,11 +7,12 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { Link} from 'react-router-dom';
 import "../styles/Projects.css";
 import "../styles/CustomBreadcrumb.css";
-
+import {switchProject} from "../actions/ProjectActions"
+import {useSelector,useDispatch} from 'react-redux';
+import WorkOpsApi from "../api/WorkOpsBackend";
 
 const useStyles = makeStyles({
   root: {
@@ -25,9 +26,21 @@ const useStyles = makeStyles({
 });
 
 const Projects = () => {
+    const {projectId}=useSelector(state=>state.ProjectReducer);
+
+    
+    const [projectdata,setProjectdata]=useState([]);
+    useEffect(()=>{
+        WorkOpsApi.get('/api/projects')
+        .then(res=>{
+            setProjectdata(res.data);
+            // console.log(res.data);
+        });
+    },[]);
+    const dispatch = useDispatch();
     const classes = useStyles();
     return (
-        <div class="projects">
+        <div className="projects">
             <div className="projects__header">
                 <div className="custombreadcrumb">
                     Projects
@@ -51,74 +64,58 @@ const Projects = () => {
                     </div>
                 </div>
                 <div className="projects__content__cards">
-                    <Card className={classes.root} style={{backgroundColor:"rgba(0,0,0,0.14)"}}>
-                        <CardActionArea>
-                        <CardMedia
-                            className={classes.media}
-                            image='/images/projectIcon1.png'
-                            title="Contemplative Reptile"
-                        />
-                        <CardContent>
-                            <Typography className="projects__content__cards__projecttitle" gutterBottom variant="h5" component="h2">
-                            Tracker
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                            orem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor lectus ac lobortis accumsan. Aliquam felis mauris, vulputate a ullamcorper et</Typography>
-                        </CardContent>
-                        </CardActionArea>
-                        <CardActions>
-                        <Button size="small" color="primary">
-                            Selected
-                        </Button>
-                        </CardActions>
-                    </Card>
-
-                    <Card className={classes.root}>
-                        <CardActionArea>
-                        <CardMedia
-                            className={classes.media}
-                            image='/images/projectIcon2.png'
-                            title="Contemplative Reptile"
-                        />
-                        <CardContent>
-                            <Typography gutterBottom variant="h5" className="projects__content__cards__projecttitle" component="h2">
-                            Url shortener
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                            Aliquam eget dolor id leo posuere tempor eu a odio. Integer lacinia tincidunt nulla, non elementum purus fringilla vitae. Aenean at augue ac nunc scelerisque volutpat.
-                            </Typography>
-                        </CardContent>
-                        </CardActionArea>
-                        <CardActions>
-                        <Button size="small" color="primary">
-                            Switch
-                        </Button>
-                        </CardActions>
-                    </Card>
-
-                    <Card className={classes.root}>
-                        <CardActionArea>
-                        <CardMedia
-                            className={classes.media}
-                            image='/images/projectIcon3.png'
-                            title="Contemplative Reptile"
-                        />
-                        <CardContent>
-                            <Typography gutterBottom className="projects__content__cards__projecttitle" variant="h5" component="h2">
-                            Business Automation Tool
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                            across all continents except Antarctica
-                            </Typography>
-                        </CardContent>
-                        </CardActionArea>
-                        <CardActions>
-                        <Button size="small" color="primary">
-                            Switch
-                        </Button>
-                        </CardActions>
-                    </Card>
+                {
+                        projectdata.map((p,index)=>{
+                            return p.id===projectId ? 
+                                <Card key={p.id} disabled className={classes.root} style={{backgroundColor:"rgba(0,0,0,0.14)"}}>
+                                    <CardActionArea>
+                                    <CardMedia
+                                        className={classes.media}
+                                        image={index%3===0 ? ('/images/projectIcon1.png') : (index%3===1 ?'/images/projectIcon2.png' : '/images/projectIcon3.png')}
+                                        title="Contemplative Reptile"
+                                    />
+                                    <CardContent>
+                                        <Typography className="projects__content__cards__projecttitle" gutterBottom variant="h5" component="h2">
+                                        {p.name}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary" component="p">
+                                        {/* orem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor lectus ac lobortis accumsan. Aliquam felis mauris, vulputate a ullamcorper et */}
+                                        {p.description}
+                                        </Typography>
+                                    </CardContent>
+                                    </CardActionArea>
+                                    <CardActions>
+                                        <Button size="small" color="primary">
+                                            Selected
+                                        </Button>
+                                    </CardActions>
+                                </Card> 
+                            :
+                                <Card key={p.id} className={classes.root} onClick={()=>switchProject(p.id,dispatch)}>
+                                    <CardActionArea>
+                                    <CardMedia
+                                        className={classes.media}
+                                        image={index%3===0 ? ('/images/projectIcon1.png') : (index%3===1 ?'/images/projectIcon2.png' : '/images/projectIcon3.png')}
+                                        title="Contemplative Reptile"
+                                    />
+                                    <CardContent>
+                                        <Typography className="projects__content__cards__projecttitle" gutterBottom variant="h5" component="h2">
+                                        {p.name}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary" component="p">
+                                        {/* orem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor lectus ac lobortis accumsan. Aliquam felis mauris, vulputate a ullamcorper et */}
+                                        {p.description}
+                                        </Typography>
+                                    </CardContent>
+                                    </CardActionArea>
+                                    <CardActions>
+                                        <Button size="small" color="primary">
+                                            Switch
+                                        </Button>
+                                    </CardActions>
+                                </Card>
+                        })
+                    }
                 </div>
 
             </div>

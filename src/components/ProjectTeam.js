@@ -1,8 +1,10 @@
-import React from 'react';
+import React,{useState} from 'react';
 import "../styles/CustomBreadcrumb.css";
 import "../styles/ProjectTeam.css";
 import DataTable from "./DataTable.js"
-
+import "../styles/Modal.css";
+import AddEditTeamMember from './AddEditTeamMember';
+import Modal from 'react-bootstrap/Modal'
 
   
 
@@ -54,6 +56,11 @@ const ProjectTeam = () => {
     { id: 'team', numeric: true, disablePadding: false, label: 'Team',width:"20%" },
     { id: 'role', numeric: true, disablePadding: false, label: 'Role',width:"10%" },
   ];
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
     return (
         <div className="projectteam">
             <div className="projectteam__header">
@@ -71,12 +78,36 @@ const ProjectTeam = () => {
             <div className="projectteam__content">
                 <div className="projectteam__content__addteammember">
                     <div>
-                        <button type="button">
+                        <button type="button" onClick={handleShow}>
                             Add New
                         </button>
                     </div>
                 </div>
                 <DataTable mode="projectteam" rows={rows} headCells={headCells}/>
+                <Modal
+                    show={show}
+                    onHide={handleClose}
+                    backdrop="static"
+                    keyboard={false}
+                    // size="lg"
+                    // aria-labelledby="contained-modal-title-vcenter"
+                    // centered
+                    centered
+                    // animation={true}
+                >
+                    <Modal.Header closeButton >
+                    <Modal.Title>Add Team Member</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                    <AddEditTeamMember onHandleClose={handleClose}/>
+                    </Modal.Body>
+                    {/* <Modal.Footer>
+                    <Button style={{width:"15%"}} variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button style={{width:"25%"}} variant="primary">Save Changes</Button>
+                    </Modal.Footer> */}
+                </Modal>
             </div>
         </div>
     );

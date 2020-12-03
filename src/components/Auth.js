@@ -154,7 +154,7 @@ const Auth = ({mode,headerText,errorMessage,onSubmit,history}) => {
                             :
                             <ul>
                                 <li>
-                                    <Link to="/signin">Can't log in?</Link>
+                                    <Link to="/forgotpassword">Forgot Password?</Link>
                                 </li>
                                 <li>
                                     <Link to="/signup">Sign up for an account</Link> 

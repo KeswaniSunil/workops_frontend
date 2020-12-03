@@ -1,13 +1,33 @@
-.addeditcomponent{
-    max-width: 450px;
-    margin: auto;
+.dashboard__header__title{
+    padding: 6px 0px 15px;
+    font-size: 24px;
+    /* font-family: CircularStdMedium; */
+    font-weight: 700;
 }
-form{
-    padding:5px;
+.dashboard__content__cards{
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-column-gap: 30px;
+    grid-row-gap: 30px;
 }
-.field-group{
+.dashboard__content__cards__card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    /* background-color: azure !important; */
+}
+.dashboard__content__cards__card__projecttitle{
+    color: rgba(0, 0, 0, 0.74);;
+    font-size: 18px !important;
+    font-weight: 400;
+}
+.dashboard__content__dropdown{
     padding: 4px 0;
     margin: 1px 0;
+    display: flex;
 }
 label{
     font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,'Fira Sans','Droid Sans','Helvetica Neue',sans-serif;
@@ -17,12 +37,11 @@ label{
     line-height: 16px;
     float: none;
     margin: 0 16px 0 0;
-    display: block ;
+    display: block !important;
     text-align: left;
     width: auto;
 }
-input , select,textarea{
-    /* height: 32px; */
+select{
     font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,'Fira Sans','Droid Sans','Helvetica Neue',sans-serif !important;
     color: #172b4d;
     font-size: 14px !important;
@@ -32,10 +51,10 @@ input , select,textarea{
     background-color: #f4f5f7;
     border: 1px solid #dfe1e6;
     padding: 4px 7px 5px;
-    width: 100% !important;
+    width: 20% !important;
     border-radius: 5px;
 }
-input:focus,select:focus,textarea:focus{
+select:focus{
     background-color: #fff; 
     border: 1px solid #4c9aff;
     outline: 0;
@@ -51,19 +70,4 @@ option{
     color: #091e42;
     background-color: #fff;
     border: none;
-}
-.buttons_container{
-    /* max-width: 380px; */
-    /* margin: auto; */
-    display: flex;
-    justify-content: flex-end;
-    /* padding: 16px 16px 16px 0; */
-    /* box-sizing: border-box; */
-}
-.buttons_container > button{
-    margin-left:10px;
-    font-size: 16px !important;
-    line-height: 1.5;
-    border-radius: .25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }

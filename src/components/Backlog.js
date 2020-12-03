@@ -6,6 +6,7 @@ import DataTable from "./DataTable.js"
 const Backlog = () => {
   const rows=[
     {
+        id:"1",
         type:"Story",
         typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
         desc:"Issue 1 Description goes here",
@@ -14,6 +15,7 @@ const Backlog = () => {
         priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/medium.svg"
     },
     {
+        id:"2",
         type:"Task",
         typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10318&avatarType=issuetype",
         desc:"Issue 2 Description goes here",
@@ -22,6 +24,7 @@ const Backlog = () => {
         priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/low.svg"
     },
     {
+        id:"3",
         type:"Sub Task",
         typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype",
         desc:"Issue 3 Description goes here",
@@ -30,6 +33,7 @@ const Backlog = () => {
         priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/lowest.svg"
     },
     {
+        id:"4",
         type:"Bug",
         typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10303&avatarType=issuetype",
         desc:"Issue 4 Description goes here",
@@ -38,6 +42,7 @@ const Backlog = () => {
         priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/high.svg"
     },
     {
+        id:"5",
         type:"Epic",
         typeIcon:"https://dreamcompany98.atlassian.net/images/icons/issuetypes/epic.svg",
         desc:"Issue 5 Description goes here",
@@ -46,6 +51,7 @@ const Backlog = () => {
         priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/highest.svg"
     },
     {
+        id:"6",
         type:"Sub Task",
         typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype",
         desc:"Issue 6 Description goes here",
@@ -54,6 +60,7 @@ const Backlog = () => {
         priority:"https://dreamcompany98.atlassian.net/images/icons/priorities/lowest.svg"
     },
     {
+        id:"7",
         type:"Story",
         typeIcon:"https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
         desc:"Issue 7 Description goes here",

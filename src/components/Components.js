@@ -16,12 +16,14 @@ import AddEditComponent from './AddEditComponent.js';
 const Components = () => {
   const rows=[
     {
+        id:"1",
         name:"Component 1",
         desc:"Component 1 Description goes here",
         lead:"Dummy Lead 1",
         assignee:"Dummy Assignee 1"
     },
     {
+        id:"2",
         name:"Component 2",
         desc:"Component 2 Description goes here",
         lead:"Dummy Lead 2",

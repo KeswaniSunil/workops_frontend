@@ -4,8 +4,8 @@ import {Button} from 'react-bootstrap';
 
 const AddEditComponent = ({id,onHandleClose}) => {
     return (
-        <div>
-            <form >
+        <div className="addeditcomponent">
+            <form>
                 <div className="field-group">
                     <label>
                         Name

@@ -22,7 +22,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-  
+import { Link} from 'react-router-dom';
+ 
+
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
       return -1;
@@ -265,7 +267,7 @@ const DataTable = ({rows,headCells,mode}) => {
                                 {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.key);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                 
                                     return (
@@ -274,12 +276,12 @@ const DataTable = ({rows,headCells,mode}) => {
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.key}
+                                        key={row.id}
                                         selected={isItemSelected}
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
-                                                onClick={(event) => handleClick(event, row.key)}
+                                                onClick={(event) => handleClick(event, row.id)}
                                                 checked={isItemSelected}
                                                 inputProps={{ 'aria-labelledby': labelId }}
                                             />
@@ -299,11 +301,11 @@ const DataTable = ({rows,headCells,mode}) => {
                                     </TableRow>
                                     );
                                 })}
-                                {emptyRows > 0 && (
+                                {/* {emptyRows > 0 && (
                                 <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
                                     <TableCell colSpan={7} />
                                 </TableRow>
-                                )}
+                                )} */}
                             </TableBody>
                         }
                         {mode==='components' &&
@@ -321,6 +323,7 @@ const DataTable = ({rows,headCells,mode}) => {
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
                                         key={row.name}
+
                                         selected={isItemSelected}
                                     >
                                         <TableCell padding="checkbox">
@@ -330,8 +333,10 @@ const DataTable = ({rows,headCells,mode}) => {
                                                 inputProps={{ 'aria-labelledby': labelId }}
                                             />
                                         </TableCell>
-                                        <TableCell component="th" id={labelId} scope="row" padding="none">
-                                            {row.name}
+                                        <TableCell component={Link} to={"/components/"+row.id} id={labelId} scope="row" padding="none">
+                                            {/* <Link to={"/components/"+row.id}> */}
+                                              {row.name}
+                                            {/* </Link> */}
                                         </TableCell>
                                         <TableCell align="left">{row.desc}</TableCell>
                                         <TableCell align="left">{row.lead}</TableCell>
@@ -353,17 +358,17 @@ const DataTable = ({rows,headCells,mode}) => {
                                 {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.email);
+                                    const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                 
                                     return (
                                     <TableRow
                                         hover
-                                        onClick={(event) => handleClick(event, row.email)}
+                                        onClick={(event) => handleClick(event, row.name)}
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.email}
+                                        key={row.name}
                                         selected={isItemSelected}
                                     >
                                         <TableCell padding="checkbox">

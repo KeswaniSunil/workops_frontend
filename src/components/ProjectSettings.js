@@ -6,9 +6,10 @@ import "../styles/ProjectSettings.css";
 import "../styles/CustomBreadcrumb.css";
 import AddEditProject from "./AddEditProject.js"
 import {Form ,Col , Button  } from 'react-bootstrap';
+// import {useSelector} from 'react-redux';
 
-
-const ProjectSettings = () => {
+const ProjectSettings = (props) => {
+    //   const {projectId}=useSelector(state=>state.ProjectReducer);
     return (
         <div className="projectsettings">
             <div className="projectsettings__header">
@@ -24,7 +25,7 @@ const ProjectSettings = () => {
                 </h1>
             </div>
             <div className="projectsettings__content">
-                <AddEditProject id={11}/>
+                <AddEditProject id={props.match.params.id}/>
                 {/* <Form className="my-3">
                     <Form.Row className="my-2">
                         <Form.Group as={Col}>

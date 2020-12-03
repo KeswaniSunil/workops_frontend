@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
@@ -19,47 +19,9 @@ import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponen
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
-import { Link} from 'react-router-dom'
-
-
-const head=[
-  {
-    id:'Config',
-    children:[
-      {
-        id: 'Dashboard', 
-        route:'/dashboard',
-        icon:<DashboardIcon />
-      },
-      {
-        id: 'Projects', 
-        route:'/projects',
-        icon:<HomeIcon />
-      }
-    ]
-  }
-]
-const categories = [
-  {
-    id: 'Main',
-    children: [
-      { id: 'Backlog',route:"/backlog", icon: <PeopleIcon />},
-      { id: 'Components',route:"/components", icon: <DnsRoundedIcon /> },
-      { id: 'Active Sprints', icon: <PublicIcon /> },
-      { id: 'Project Team ',route:"/projectteam", icon: <PermMediaOutlinedIcon /> },
-      { id: 'Functions', icon: <SettingsEthernetIcon /> },
-      { id: 'Reports', icon: <SettingsInputComponentIcon /> },
-    ],
-  },
-  {
-    id: 'Settings',
-    children: [
-      { id: 'Project Settings',route:"/projectsettings", icon: <SettingsIcon /> },
-      // { id: 'Help', icon: <TimerIcon /> },
-      { id: 'Log out',route:"/logout", icon: <PhonelinkSetupIcon /> },
-    ],
-  },
-];
+import { Link} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import WorkOpsApi from "../api/WorkOpsBackend";
 
 const styles = (theme) => ({
   categoryHeader: {
@@ -103,8 +65,61 @@ const styles = (theme) => ({
 });
 
 function Navigator(props) {
+
+  const [project,setProject]=useState(null);
+  const {projectId}=useSelector(state=>state.ProjectReducer);
+  const imageNum=Math.floor(Math.random() * Math.floor(3));
+  useEffect(()=>{
+    WorkOpsApi.get('/api/projects/'+projectId)
+    .then(res=>{
+        // console.log("Calling Proj id= "+projectId);
+        setProject(res.data);
+        // console.log(res.data);
+    });
+  },[projectId]);
   const { classes, ...other } = props;
   const [active,setActive]=useState("Dashboard");
+
+  const head=[
+    {
+      id:'Config',
+      children:[
+        {
+          id: 'Projects', 
+          route:'/projects',
+          icon:<HomeIcon />
+        },
+        {
+          id: 'Dashboard', 
+          route:'/dashboard',
+          icon:<DashboardIcon />
+        }
+      ]
+    }
+  ]
+  const categories = [
+    {
+      id: 'Main',
+      children: [
+        { id: 'Backlog',route:"/backlog", icon: <PeopleIcon />},
+        { id: 'Components',route:"/components", icon: <DnsRoundedIcon /> },
+        { id: 'Active Sprints', icon: <PublicIcon /> },
+        { id: 'Project Team ',route:"/projectteam", icon: <PermMediaOutlinedIcon /> },
+        { id: 'Functions', icon: <SettingsEthernetIcon /> },
+        { id: 'Reports', icon: <SettingsInputComponentIcon /> },
+      ],
+    },
+    {
+      id: 'Settings',
+      children: [
+        { id: 'Project Settings',route:"/projectsettings/"+projectId, icon: <SettingsIcon /> },
+        // { id: 'Help', icon: <TimerIcon /> },
+        { id: 'Log out',route:"/logout", icon: <PhonelinkSetupIcon /> },
+      ],
+    },
+  ];
+
+  
   return (
     <Drawer variant="permanent" {...other} style={{overflow: "hidden"}}>
       <List disablePadding>
@@ -122,15 +137,19 @@ function Navigator(props) {
           style={{height:"10%",display:"flex",alignItems:"center"}}
         >
           <span className={classes.itemIcon} style={{marginLeft:"5px"}}>
-            <img src="/images/projectIcon1.png" height="30" style={{borderRadius:"5px"}}/>
+            <img src={imageNum===0 ? ('/images/projectIcon1.png') : (imageNum===1 ?'/images/projectIcon2.png' : '/images/projectIcon3.png')} height="30" style={{borderRadius:"5px"}}/>
           </span>
           <div
             classes={{
               primary: classes.itemPrimary,
             }}
           >
-            <h5 style={{marginBottom:0}}>Tracker</h5>
-            <span style={{fontSize:"12px"}}>Key: ZG20191208</span>    
+            {projectId &&
+            <>
+            <h5 style={{marginBottom:0}}>{project.name}</h5>
+            <span style={{fontSize:"12px"}}>Key: {project.projectkey}</span>  
+            </>
+            }
           </div>
         </div>
         {head.map(({ id, children }) => (
