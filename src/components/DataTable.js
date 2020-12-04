@@ -292,7 +292,7 @@ const DataTable = ({rows,headCells,mode}) => {
                                         </TableCell>
                                         <TableCell align="left">{row.desc}</TableCell>
                                         <TableCell align="left">{row.key}</TableCell>
-                                        <TableCell align="left">{row.status}</TableCell>
+                                        <TableCell align="left" style={{textTransform:"uppercase"}}>{row.status}</TableCell>
                                         <TableCell align="center">
                                             <img src={row.priority} height="20"/>
                                         </TableCell>
@@ -389,6 +389,91 @@ const DataTable = ({rows,headCells,mode}) => {
                                 )} */}
                             </TableBody>
                         }
+
+                        {mode==='sprints' &&
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.name);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                
+                                    return (
+                                    <TableRow
+                                        hover
+                                        onClick={(event) => handleClick(event, row.name)}
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.name}
+                                        selected={isItemSelected}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                checked={isItemSelected}
+                                                inputProps={{ 'aria-labelledby': labelId }}
+                                            />
+                                        </TableCell>
+                                        <TableCell component="th" id={labelId} scope="row" padding="none"
+                                        >
+                                        {row.name}
+                                        </TableCell>
+                                        <TableCell align="left">{row.duration}</TableCell>
+                                        <TableCell align="left">{row.startdate}</TableCell>
+                                        <TableCell align="left">{row.enddate}</TableCell>
+                                        <TableCell align="left">{row.sprintgoal}</TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                                {/* {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={7} />
+                                </TableRow>
+                                )} */}
+                            </TableBody>
+                        }
+
+                        {mode==='versions' &&
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.name);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                
+                                    return (
+                                    <TableRow
+                                        hover
+                                        onClick={(event) => handleClick(event, row.name)}
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.name}
+                                        selected={isItemSelected}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                checked={isItemSelected}
+                                                inputProps={{ 'aria-labelledby': labelId }}
+                                            />
+                                        </TableCell>
+                                        <TableCell component="th" id={labelId} scope="row" padding="none"
+                                        >
+                                        {row.name}
+                                        </TableCell>
+                                        <TableCell align="left">{row.releasedate}</TableCell>
+                                        <TableCell align="left">{row.description}</TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                                {/* {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={7} />
+                                </TableRow>
+                                )} */}
+                            </TableBody>
+                        }
+
                         </Table>
                     </TableContainer>
                     <TablePagination

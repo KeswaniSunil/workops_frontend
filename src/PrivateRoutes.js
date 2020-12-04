@@ -7,9 +7,14 @@ import ProjectSettings from './components/ProjectSettings';
 import ProjectTeam from './components/ProjectTeam';
 import CreateProject from './components/CreateProject';
 import Components from './components/Components';
+import Sprints from './components/Sprints';
+import Versions from './components/Versions';
+import SprintDetails from './components/SprintDetails';
+import VersionDetails from './components/VersionDetails';
 
 import IssueDetails from './components/IssueDetails';
 import AddIssue from './components/AddIssue';
+import UserProfile from './components/UserProfile';
  const PrivateRoutes = ({
     component: Component,
     ...rest
@@ -23,15 +28,20 @@ import AddIssue from './components/AddIssue';
         else if(pathname==="/projectteam") return <ProjectTeam/>
         else if(pathname==="/createproject") return <CreateProject />
         else if(pathname==="/components") return <Components />
-        else if(pathname==="/issuedetails/:id") return <IssueDetails/>
+        else if(pathname==="/sprints") return <Sprints/>
+        else if(pathname==="/issues/:id") return <IssueDetails/>
+        else if(pathname==="/sprints/:id") return <SprintDetails/>
         else if(pathname==="/addissue") return <AddIssue/>
+        else if(pathname==="/userprofile") return <UserProfile/>
+        else if(pathname==="/versions") return <Versions/>
+        else if(pathname==="/versions/:id") return <VersionDetails/>
     }
     return (        
         <Route
             {...rest}
             render={props => {
                 if (localStorage.getItem("token")) {
-                    console.log(props);
+                    // console.log(props);
                 return <Component {...props} >
                     {/* <Dashboard/> */}
                     {routeToComponentMapping(props.match.path)}

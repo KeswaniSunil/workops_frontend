@@ -75,9 +75,11 @@ function Header(props) {
               </Tooltip>
             </Grid>
             <Grid item>
-              <IconButton color="inherit" className={classes.iconButtonAvatar}>
-                <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQfkXX6ehXfa-zzSjkEQjne-NTk9Qkh2HtqXQ&usqp=CAU" alt="My Avatar" />
-              </IconButton>
+              <Link href="/userprofile">
+                <IconButton color="inherit" className={classes.iconButtonAvatar}>
+                  <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQfkXX6ehXfa-zzSjkEQjne-NTk9Qkh2HtqXQ&usqp=CAU" alt="My Avatar" />
+                </IconButton>
+              </Link>
             </Grid>
           </Grid>
         </Toolbar>

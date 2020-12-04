@@ -45,7 +45,8 @@ const categories = [
     children: [
       { id: 'Backlog',route:"/backlog", icon: <PeopleIcon />},
       { id: 'Components',route:"/components", icon: <DnsRoundedIcon /> },
-      { id: 'Active Sprints', icon: <PublicIcon /> },
+      { id: 'Active Sprints',route:"/sprints", icon: <TimerIcon /> },
+      { id: 'Versions',route:"/versions", icon: <SettingsEthernetIcon /> },
       { id: 'Project Team ',route:"/projectteam", icon: <PermMediaOutlinedIcon /> },
       { id: 'Functions', icon: <SettingsEthernetIcon /> },
       { id: 'Reports', icon: <SettingsInputComponentIcon /> },
