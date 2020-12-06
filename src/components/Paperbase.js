@@ -8,7 +8,7 @@ import Link from '@material-ui/core/Link';
 import Navigator from './Navigator';
 // import Content from './Content';
 import Header from './Header';
-import {useDispatch} from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
 import {getProject} from "../actions/ProjectActions"
 
 let theme = createMuiTheme({
@@ -154,6 +154,7 @@ function Paperbase(props) {
   const { classes } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const dispatch = useDispatch();
+  const {projectId}=useSelector(state=>state.ProjectReducer);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -161,7 +162,7 @@ function Paperbase(props) {
 
   useEffect(() => {
     getProject(dispatch);
-  });
+  },[projectId]);
 
   return (
     <ThemeProvider theme={theme}>

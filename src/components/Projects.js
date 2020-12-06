@@ -14,6 +14,7 @@ import {switchProject} from "../actions/ProjectActions"
 import {useSelector,useDispatch} from 'react-redux';
 import WorkOpsApi from "../api/WorkOpsBackend";
 
+
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
@@ -27,14 +28,14 @@ const useStyles = makeStyles({
 
 const Projects = () => {
     const {projectId}=useSelector(state=>state.ProjectReducer);
-
+    const {role}=useSelector(state=>state.ProjectReducer);
     
     const [projectdata,setProjectdata]=useState([]);
     useEffect(()=>{
         WorkOpsApi.get('/api/projects')
         .then(res=>{
             setProjectdata(res.data);
-            // console.log(res.data);
+            console.log(projectdata);
         });
     },[]);
     const dispatch = useDispatch();
@@ -54,15 +55,17 @@ const Projects = () => {
                 </h1>
             </div>
             <div className="projects__content">
-                <div className="projects__content__addproject">
-                    <div>
-                        <button type="button">
-                            <Link to="/createproject" style={{color:"inherit",margin:"0px"}}>
-                                    Create New
-                            </Link>
-                        </button>
+                {role!=='basic' &&
+                    <div className="projects__content__addproject">
+                        <div>
+                            <button type="button">
+                                <Link to="/createproject" style={{color:"inherit",margin:"0px"}}>
+                                        Create New
+                                </Link>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                }
                 <div className="projects__content__cards">
                 {
                         projectdata.map((p,index)=>{

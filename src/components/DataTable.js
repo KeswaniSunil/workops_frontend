@@ -23,7 +23,9 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { Link} from 'react-router-dom';
- 
+import WorkOpsApi from "../api/WorkOpsBackend";
+import {useSelector} from 'react-redux';
+
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -129,32 +131,32 @@ import { Link} from 'react-router-dom';
     },
   }));
   
-  const EnhancedTableToolbar = (props) => {
-    const classes = useToolbarStyles();
-    const { numSelected } = props;
+  // const EnhancedTableToolbar = (props) => {
+  //   const classes = useToolbarStyles();
+  //   const { numSelected } = props;
   
-    return (
-      <div className="selectedrows">
-        {numSelected > 0 &&
-          <div className="selectedrows__title">
-            {numSelected} selected
-          </div>
-        }
+  //   return (
+  //     <div className="selectedrows">
+  //       {numSelected > 0 &&
+  //         <div className="selectedrows__title">
+  //           {numSelected} selected
+  //         </div>
+  //       }
   
-        {numSelected > 0 &&
-          <div title="Delete">
-            <IconButton aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </div>
-        }
-      </div>
-    );
-  };
+  //       {numSelected > 0 &&
+  //         <div title="Delete">
+  //           <IconButton aria-label="delete" onClick={()=>{deleteRows}}>
+  //             <DeleteIcon />
+  //           </IconButton>
+  //         </div>
+  //       }
+  //     </div>
+  //   );
+  // };
   
-  EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-  };
+  // EnhancedTableToolbar.propTypes = {
+  //   numSelected: PropTypes.number.isRequired,
+  // };
   
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -180,7 +182,7 @@ import { Link} from 'react-router-dom';
     },
   }));
 
-const DataTable = ({rows,headCells,mode}) => {
+const DataTable = ({rows,headCells,mode,generate}) => {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -188,6 +190,7 @@ const DataTable = ({rows,headCells,mode}) => {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const {projectId}=useSelector(state=>state.ProjectReducer);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -197,8 +200,21 @@ const DataTable = ({rows,headCells,mode}) => {
     
       const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-          const newSelecteds = rows.map((n) => n.name);
-          setSelected(newSelecteds);
+          if(mode==='projectteam'){
+            // console.log("rows= "+rows);
+            const newSelecteds = rows.map((n) => n.id.user.email);
+            // console.log(newSelecteds);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='components'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else{
+            const newSelecteds = rows.map((n) => n.name);
+            setSelected(newSelecteds);
+          }
+
           return;
         }
         setSelected([]);
@@ -220,10 +236,45 @@ const DataTable = ({rows,headCells,mode}) => {
             selected.slice(selectedIndex + 1),
           );
         }
-    
+        
         setSelected(newSelected);
       };
     
+      const deleteRows=()=>{
+        if(mode==="projectteam"){
+          // console.log(selected);
+          selected.map(s=>{
+            console.log(projectId+" "+s);
+            WorkOpsApi.delete("/api/projectteam/"+projectId+"/"+s)
+            .then(res=>{
+              if(res){
+                console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          });
+        }
+        if(mode==="components"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(s)
+            WorkOpsApi.delete("/api/components/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+      }
+
       const handleChangePage = (event, newPage) => {
         setPage(newPage);
       };
@@ -244,7 +295,22 @@ const DataTable = ({rows,headCells,mode}) => {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                    <EnhancedTableToolbar numSelected={selected.length} />
+                    {/* <EnhancedTableToolbar numSelected={selected.length}/> */}
+                    <div className="selectedrows">
+                      {selected.length > 0 &&
+                        <div className="selectedrows__title">
+                          {selected.length} selected
+                        </div>
+                      }
+                
+                      {selected.length > 0 &&
+                        <div title="Delete">
+                          <IconButton aria-label="delete" onClick={deleteRows}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </div>
+                      }
+                    </div>
                     <TableContainer>
                         <Table
                         className={classes.table}
@@ -313,7 +379,7 @@ const DataTable = ({rows,headCells,mode}) => {
                                 {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                 
                                     return (
@@ -322,13 +388,12 @@ const DataTable = ({rows,headCells,mode}) => {
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.name}
-
+                                        key={row.id}
                                         selected={isItemSelected}
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
-                                                onClick={(event) => handleClick(event, row.name)}
+                                                onClick={(event) => handleClick(event, row.id)}
                                                 checked={isItemSelected}
                                                 inputProps={{ 'aria-labelledby': labelId }}
                                             />
@@ -338,11 +403,8 @@ const DataTable = ({rows,headCells,mode}) => {
                                               {row.name}
                                             {/* </Link> */}
                                         </TableCell>
-                                        <TableCell align="left">{row.desc}</TableCell>
-                                        <TableCell align="left">{row.lead}</TableCell>
-                                        <TableCell align="left">
-                                            {row.assignee}
-                                        </TableCell>
+                                        <TableCell align="left">{row.description}</TableCell>
+                                        <TableCell align="left">{row.user.fullName}</TableCell>
                                     </TableRow>
                                     );
                                 })}
@@ -358,32 +420,31 @@ const DataTable = ({rows,headCells,mode}) => {
                                 {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.id.user.email);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                 
                                     return (
                                     <TableRow
                                         hover
-                                        onClick={(event) => handleClick(event, row.name)}
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.name}
+                                        key={row.id.user.email}
                                         selected={isItemSelected}
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
+                                                onClick={(event) => handleClick(event, row.id.user.email)}
                                                 checked={isItemSelected}
                                                 inputProps={{ 'aria-labelledby': labelId }}
                                             />
                                         </TableCell>
                                         <TableCell component="th" id={labelId} scope="row" padding="none"
                                         >
-                                        {row.name}
+                                        {row.id.user.fullName}
                                         </TableCell>
-                                        <TableCell align="left">{row.email}</TableCell>
-                                        <TableCell align="left">{row.team}</TableCell>
-                                        <TableCell align="left">{row.role}</TableCell>
+                                        <TableCell align="left">{row.id.user.email}</TableCell>
+                                        <TableCell align="left">{row.role.role}</TableCell>
                                     </TableRow>
                                     );
                                 })}

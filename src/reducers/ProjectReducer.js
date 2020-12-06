@@ -1,7 +1,8 @@
 import {actionTypes} from '../actions/ProjectActions';
 const initialState={
     projectId:null ,
-    errMessage: ''
+    errMessage: '',
+    role:null
 }
 
 export const ProjectReducer = (state = initialState, action) => {
@@ -9,7 +10,7 @@ export const ProjectReducer = (state = initialState, action) => {
         case actionTypes.ERROR:
             return {...state,errMessage:action.payload};
         case actionTypes.SELECT_PROJECT:
-            return {projectId:action.payload , errMessage:""};
+            return {projectId:action.payload.projectId, errMessage:"",role:action.payload.role};
         default:
             return state;
      }

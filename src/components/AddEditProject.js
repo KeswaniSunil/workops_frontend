@@ -1,6 +1,8 @@
 import React,{useState,useEffect} from 'react';
 import "../styles/AddEditProject.css";
 import WorkOpsApi from "../api/WorkOpsBackend";
+import { useHistory } from "react-router-dom";
+
 
 const AddEditProject = ({id}) => {
     //Way 1:
@@ -15,6 +17,8 @@ const AddEditProject = ({id}) => {
         description:""
     }
 
+    let history = useHistory();
+
     const [project,setProject]=useState(initialprojecstate);
     useEffect(()=>{
         if(id!==undefined){
@@ -27,27 +31,46 @@ const AddEditProject = ({id}) => {
     const handleSubmit=(e)=>{
         e.preventDefault();
         if(id===undefined){
-            WorkOpsApi.post("/api/projects",{project})
+            // console.log("In");
+            WorkOpsApi.get("/api/user/"+localStorage.getItem("token"))
             .then(res=>{
-                if(res){
-                    console.log(res);
-                  alert("Project Added");
-                }
-            })
-            .catch(e=>{
-                alert("Error");
+            // console.log("email "+res.data.email);
+                WorkOpsApi.post("/api/projects",{
+                    name:project.name,
+                    projectKey:project.projectkey,
+                    description:project.description,
+                    email:res.data.email
+                })
+                .then(res1=>{
+                    if(res1){
+            // console.log(res1);
+
+                        history.push("/projects");
+                        // console.log(res);
+                    //   alert("Project Added");
+
+                    }
+                })
+                .catch(e=>{
+                    alert("Error");
+                })
             })
         }
         else{
-            WorkOpsApi.put("/api/projects",{project})
+            WorkOpsApi.put("/api/projects",{
+                    id:id,
+                    name:project.name,
+                    projectkey:project.projectkey,
+                    description:project.description
+                })
             .then(res=>{
                 if(res){
-                    console.log(res);
-                  alert("Project Added");
+                    // console.log(res);
+                  alert(res.data);
                 }
             })
             .catch(e=>{
-                alert("Error");
+                alert(e);
             })
         }
     }
@@ -58,8 +81,9 @@ const AddEditProject = ({id}) => {
                     <label>
                         Name
                     </label>
-                    <input type="text" value={id && project.name}
+                    <input type="text" value={project.name}
                     //  placeholder="Enter name"
+                        disabled={id!==undefined}
                         onChange={(e)=>{setProject({...project,name:e.target.value})}}
                      />
                 </div>
@@ -67,8 +91,9 @@ const AddEditProject = ({id}) => {
                     <label>
                         Key
                     </label>
-                    <input type="text" value={id && project.projectkey} 
+                    <input type="text" value={project.projectkey} 
                         onChange={(e)=>{setProject({...project,projectkey:e.target.value})}}
+                        maxLength="4"
 // placeholder="Enter Key" 
                     style={{width:"30%"}}/>
                 </div>
@@ -76,7 +101,7 @@ const AddEditProject = ({id}) => {
                     <label>
                         URL
                     </label>
-                    <input type="text" value={id && "https://www.google.com/"}  
+                    <input type="text" value={"https://www.google.com/"}  
                     // placeholder="Enter URL"
                     />
                 </div>
@@ -86,7 +111,7 @@ const AddEditProject = ({id}) => {
                     </label>
                     <textarea rows="4" cols="50" style={{width:"80%"}} 
                     // placeholder="enter description"
-                    value={id && project.description}
+                    value={project.description}
                     onChange={(e)=>{setProject({...project,description:e.target.value})}}
                     >
                     </textarea>
