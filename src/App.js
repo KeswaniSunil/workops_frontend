@@ -50,10 +50,15 @@ function App() {
           <PrivateRoutes path="/projectteam" exact component={Paperbase} />
           <PrivateRoutes path="/createproject" exact component={Paperbase} />
           <PrivateRoutes path="/components" exact component={Paperbase} />
+          <PrivateRoutes path="/versions" exact component={Paperbase} />
+          <PrivateRoutes path="/sprints" exact component={Paperbase} />
           <PrivateRoutes path="/components/:id" exact component={Paperbase} />
+          <PrivateRoutes path="/issues/new" exact component={Paperbase} />
+          <PrivateRoutes path="/issues/:id" exact component={Paperbase} />
+          <PrivateRoutes path="/versions/:id" exact component={Paperbase} />
+          <PrivateRoutes path="/sprints/:id" exact component={Paperbase} />
           <Route path="/logout" exact  component={Logout} />
-          <PrivateRoutes path="/issuedetails/:id" exact component={Paperbase} />
-          <PrivateRoutes path="/addissue" exact component={Paperbase} />
+          <PrivateRoutes path="/userprofile" exact component={Paperbase} />
           
           <Route path="/*" component={PageNotFound} />
         </Switch>

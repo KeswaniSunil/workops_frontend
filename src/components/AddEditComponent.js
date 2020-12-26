@@ -26,6 +26,7 @@ const AddEditComponent = ({id,onHandleClose}) => {
         if(id!==undefined){
             WorkOpsApi.get("/api/components/"+id)
             .then(res=>{
+                // console.log(res.data);
                 initialprojecstate.name=res.data.name;
                 initialprojecstate.description=res.data.description;
                 initialprojecstate.lead=res.data.user.email;

@@ -106,7 +106,8 @@ function Navigator(props) {
       children: [
         { id: 'Backlog',route:"/backlog", icon: <PeopleIcon />},
         { id: 'Components',route:"/components", icon: <DnsRoundedIcon /> },
-        { id: 'Active Sprints', icon: <PublicIcon /> },
+        { id: 'Active Sprints',route:"/sprints", icon: <PublicIcon /> },
+        { id: 'Versions',route:"/versions", icon: <PublicIcon /> },
         { id: 'Project Team ',route:"/projectteam", icon: <PermMediaOutlinedIcon /> },
         { id: 'Functions', icon: <SettingsEthernetIcon /> },
         { id: 'Reports', icon: <SettingsInputComponentIcon /> },

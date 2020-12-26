@@ -182,7 +182,7 @@ import EditIcon from '@material-ui/icons/Edit';
     },
   }));
 
-const DataTable = ({rows,headCells,mode,generate,onEdit,componentIdForComponentIssuetype}) => {
+const DataTable = ({rows,headCells,mode,generate,onEdit,componentIdForComponentIssuetype,versionIdForVersionIssuetype, sprintIdForSprintIssuetype}) => {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -215,6 +215,22 @@ const DataTable = ({rows,headCells,mode,generate,onEdit,componentIdForComponentI
             setSelected(newSelecteds);
           }
           else if(mode==='backlog'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='versions'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='versionIssue'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='sprints'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='sprintIssue'){
             const newSelecteds = rows.map((n) => n.id);
             setSelected(newSelecteds);
           }
@@ -311,6 +327,81 @@ const DataTable = ({rows,headCells,mode,generate,onEdit,componentIdForComponentI
                 setSelected([]);
                 return;
               } 
+            })
+          }
+          );
+        }
+        else if(mode==="versions"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(s)
+            WorkOpsApi.delete("/api/versions/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+
+        else if(mode==="versionIssue"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(versionIdForVersionIssuetype+" "+s);
+            WorkOpsApi.delete("/api/issueversion/"+versionIdForVersionIssuetype+"/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+
+        else if(mode==="sprints"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(s)
+            WorkOpsApi.delete("/api/sprint/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+
+        else if(mode==="sprintIssue"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log("Issue "+s);
+            WorkOpsApi.get("/api/issues/"+s)
+            .then(resIss=>{
+              resIss.data.sprint=null;
+              WorkOpsApi.put("/api/issues",resIss.data)
+              .then(res=>{
+                if(res){
+                  // console.log(res);
+                  generate();
+                  setSelected([]);
+                  return;
+                } 
+              })
             })
           }
           );
@@ -556,6 +647,194 @@ const DataTable = ({rows,headCells,mode,generate,onEdit,componentIdForComponentI
                                 )} */}
                             </TableBody>
                         }
+
+                        {mode==='sprints' &&
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                
+                                    return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.name}
+                                        selected={isItemSelected}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                onClick={(event) => handleClick(event, row.id)}
+                                                checked={isItemSelected}
+                                                inputProps={{ 'aria-labelledby': labelId }}
+                                            />
+                                        </TableCell>
+                                        <TableCell component={Link} to={"/sprints/"+row.id} id={labelId} scope="row" padding="none">
+                                        {row.name}
+                                        </TableCell>
+                                        <TableCell align="left">{new Date(row.startdate).toLocaleDateString('en-CA')}</TableCell>
+                                        <TableCell align="left">{new Date(row.enddate).toLocaleDateString('en-CA')}</TableCell>
+                                        <TableCell align="left">{row.goal}</TableCell>
+                                        <TableCell align="center">
+                                          <IconButton aria-label="delete" onClick={()=>{onEdit(row.id)}}>
+                                            <EditIcon/>
+                                          </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                                {/* {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={7} />
+                                </TableRow>
+                                )} */}
+                            </TableBody>
+                        }
+
+                        {mode==='sprintIssue' &&
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                
+                                    return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.id}
+                                        selected={isItemSelected}
+                                    >
+                                      <TableCell padding="checkbox">
+                                          <Checkbox
+                                              onClick={(event) => handleClick(event, row.id)}
+                                              checked={isItemSelected}
+                                              inputProps={{ 'aria-labelledby': labelId }}
+                                          />
+                                      </TableCell>
+                                      <TableCell component="th" id={labelId} scope="row" padding="none"
+                                          // style={{display:"flex",alignItems:"center"}}
+                                      >
+                                          <img src={row.issuetypeBean.name==='Story' ? issueTypeIcons[0] : (row.issuetypeBean.name==='Task' ? issueTypeIcons[1] : (row.issuetypeBean.name==='Sub Task' ? issueTypeIcons[2] : (row.issuetypeBean.name==='Bug' ? issueTypeIcons[3]:issueTypeIcons[4] )) )} style={{paddingRight:5}}/>
+                                          <span>{row.issuetypeBean.name}</span>
+                                      </TableCell>
+                                      <TableCell align="left">{row.name}</TableCell>
+                                      <TableCell align="left">{row.description}</TableCell>
+                                      <TableCell align="left">{row.issuestatus.name}</TableCell>
+                                      <TableCell align="center">
+                                      <img src={row.issuepriorityBean.name==='lowest' ? issuePriorityString+"lowest.svg" : (row.issuepriorityBean.name==='low' ? issuePriorityString+"low.svg" : (row.issuepriorityBean.name==='medium' ? issuePriorityString+"medium.svg" : (row.issuepriorityBean.name==='high' ? issuePriorityString+"high.svg":issuePriorityString+"highest.svg" ) ) )} height="20" style={{paddingRight:5}}/>
+
+                                      </TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                                {/* {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={7} />
+                                </TableRow>
+                                )} */}
+                            </TableBody>
+                       }
+
+
+                        {mode==='versions' &&
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                
+                                    return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.name}
+                                        selected={isItemSelected}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                onClick={(event) => handleClick(event, row.id)}
+                                                checked={isItemSelected}
+                                                inputProps={{ 'aria-labelledby': labelId }}
+                                            />
+                                        </TableCell>
+                                        <TableCell component={Link} to={"/versions/"+row.id} id={labelId} scope="row" padding="none">
+                                        {row.name}
+                                        </TableCell>
+                                        <TableCell align="left">{new Date(row.releasedate).toLocaleDateString('en-CA')}</TableCell>
+                                        <TableCell align="left">{row.description}</TableCell>
+                                        <TableCell align="center">
+                                          <IconButton aria-label="delete" onClick={()=>{onEdit(row.id)}}>
+                                            <EditIcon/>
+                                          </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                                {/* {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={7} />
+                                </TableRow>
+                                )} */}
+                            </TableBody>
+                        }
+                        {mode==='versionIssue' &&
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                
+                                    return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.id}
+                                        selected={isItemSelected}
+                                    >
+                                      <TableCell padding="checkbox">
+                                          <Checkbox
+                                              onClick={(event) => handleClick(event, row.id)}
+                                              checked={isItemSelected}
+                                              inputProps={{ 'aria-labelledby': labelId }}
+                                          />
+                                      </TableCell>
+                                      <TableCell component="th" id={labelId} scope="row" padding="none"
+                                          // style={{display:"flex",alignItems:"center"}}
+                                      >
+                                          <img src={row.issuetypeBean.name==='Story' ? issueTypeIcons[0] : (row.issuetypeBean.name==='Task' ? issueTypeIcons[1] : (row.issuetypeBean.name==='Sub Task' ? issueTypeIcons[2] : (row.issuetypeBean.name==='Bug' ? issueTypeIcons[3]:issueTypeIcons[4] )) )} style={{paddingRight:5}}/>
+                                          <span>{row.issuetypeBean.name}</span>
+                                      </TableCell>
+                                      <TableCell align="left">{row.name}</TableCell>
+                                      <TableCell align="left">{row.description}</TableCell>
+                                      <TableCell align="left">{row.issuestatus.name}</TableCell>
+                                      <TableCell align="center">
+                                      <img src={row.issuepriorityBean.name==='lowest' ? issuePriorityString+"lowest.svg" : (row.issuepriorityBean.name==='low' ? issuePriorityString+"low.svg" : (row.issuepriorityBean.name==='medium' ? issuePriorityString+"medium.svg" : (row.issuepriorityBean.name==='high' ? issuePriorityString+"high.svg":issuePriorityString+"highest.svg" ) ) )} height="20" style={{paddingRight:5}}/>
+
+                                      </TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                                {/* {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={7} />
+                                </TableRow>
+                                )} */}
+                            </TableBody>
+                        }
+
                         </Table>
                     </TableContainer>
                     <TablePagination
