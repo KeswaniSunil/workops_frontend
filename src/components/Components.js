@@ -34,6 +34,8 @@ const Components = () => {
     }
     const editMode=(cid)=>{
         setEditComponentId(cid);
+        console.log("Component "+cid);
+
         handleShow();
     }
     const addMode=()=>{
@@ -41,7 +43,7 @@ const Components = () => {
         handleShow();
     }
     useEffect(()=>{
-        console.log("Component"+projectId);
+        // console.log("Component"+projectId);
         generate();
     },[]);
 

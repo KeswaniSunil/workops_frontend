@@ -3,6 +3,8 @@ import "../styles/CustomBreadcrumb.css";
 import "../styles/Backlog.css";
 import DataTable from "./DataTable.js"
 import WorkOpsApi from "../api/WorkOpsBackend";
+import { Link} from 'react-router-dom';
+
 
 const Backlog = () => {
     const [rows,setRows]=useState([]);
@@ -50,7 +52,9 @@ const Backlog = () => {
                 <div className="backlog__content__addbacklog">
                     <div>
                         <button type="button">
-                            Create New
+                            <Link to="/issues/new" style={{color:"inherit",margin:"0px"}}>
+                                            Create New
+                            </Link>
                         </button>
                     </div>
                 </div>

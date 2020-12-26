@@ -117,7 +117,7 @@ const Sprints = () => {
                     // animation={true}
                 >
                     <Modal.Header closeButton >
-                    <Modal.Title>Add Sprint</Modal.Title>
+                    <Modal.Title>Sprint</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                     <AddSprint onHandleClose={handleClose} id={editSprintId}/>

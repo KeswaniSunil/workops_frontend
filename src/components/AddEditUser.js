@@ -28,15 +28,15 @@ const AddEditUser = ({id}) => {
                 WorkOpsApi.get("/api/userprofiles/"+res.data.email)
                 .then(res1=>{
                     console.log(res1.data);
-                    initialuserstate.email=res1.data.email;
-                    initialuserstate.fullName=res1.data.fullName;
-                    initialuserstate.publicName=res1.data.publicName;
-                    initialuserstate.mobileNo=res1.data.mobileNo;
-                    initialuserstate.department=res1.data.department;
-                    initialuserstate.organisation=res1.data.organisation;
-                    initialuserstate.userlocaltime=res1.data.userlocaltime;
-                    initialuserstate.selectedProject=res1.data.selectedProject;
-                    setUser(initialuserstate);
+                    // initialuserstate.email=res1.data.email;
+                    // initialuserstate.fullName=res1.data.fullName;
+                    // initialuserstate.publicName=res1.data.publicName;
+                    // initialuserstate.mobileNo=res1.data.mobileNo;
+                    // initialuserstate.department=res1.data.department;
+                    // initialuserstate.organisation=res1.data.organisation;
+                    // initialuserstate.userlocaltime=res1.data.userlocaltime;
+                    // initialuserstate.selectedProject=res1.data.selectedProject;
+                    setUser(res1.data);
                 })
             })
         }

@@ -11,7 +11,6 @@ import {useSelector} from 'react-redux';
 import WorkOpsApi from "../api/WorkOpsBackend";
 
 const UserSettings = ({id}) => {
-
     return (
         <div className="usersettings">
             <div className="usersettings__header">

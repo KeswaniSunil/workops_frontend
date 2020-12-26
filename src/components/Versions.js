@@ -111,7 +111,7 @@ const Versions = () => {
                     // animation={true}
                 >
                     <Modal.Header closeButton >
-                    <Modal.Title>Add Version</Modal.Title>
+                    <Modal.Title>Version</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                     <AddEditVersion onHandleClose={handleClose} id={editVersionId}/>

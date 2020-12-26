@@ -28,8 +28,8 @@ const AddIssue = ({id}) => {
     const {projectId}=useSelector(state=>state.ProjectReducer);
 
     const getProject=()=>{
-        // WorkOpsApi.get("/api/projects/"+projectId)
-        WorkOpsApi.get("/api/projects/101")
+        WorkOpsApi.get("/api/projects/"+projectId)
+        // WorkOpsApi.get("/api/projects/101")
         .then(res=>{
             if(res){
                 // console.log(res);
@@ -66,8 +66,8 @@ const AddIssue = ({id}) => {
         });
     }
     const getTeam=()=>{
-        // WorkOpsApi.get("/api/projectteam/"+projectId)
-        WorkOpsApi.get("/api/projectteam/101")
+        WorkOpsApi.get("/api/projectteam/"+projectId)
+        // WorkOpsApi.get("/api/projectteam/101")
         .then(res=>{
             if(res){
                 // console.log(res);
@@ -140,7 +140,7 @@ const AddIssue = ({id}) => {
                                     WorkOpsApi.get("/api/userprofiles/"+issue.assignedto)
                                     .then(resAssignedto=>{
                                         if(resAssignedto){
-                                            WorkOpsApi.get("/api/projects/101")
+                                            WorkOpsApi.get("/api/projects/"+projectId)
                                             .then(res1=>{
                                                 const issueobj={
                                                     name:issue.name,
@@ -212,7 +212,7 @@ const AddIssue = ({id}) => {
                                     WorkOpsApi.get("/api/userprofiles/"+issue.assignedto)
                                     .then(resAssignedto=>{
                                         if(resAssignedto){
-                                            WorkOpsApi.get("/api/projects/101")
+                                            WorkOpsApi.get("/api/projects/"+projectId)
                                             .then(res1=>{
                                                 const issueobj={
                                                     id:id,
