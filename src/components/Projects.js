@@ -32,10 +32,14 @@ const Projects = () => {
     
     const [projectdata,setProjectdata]=useState([]);
     useEffect(()=>{
-        WorkOpsApi.get('/api/projects')
-        .then(res=>{
-            setProjectdata(res.data);
-            console.log(projectdata);
+        console.log("Inside project= "+projectId);
+        WorkOpsApi.get('/api/user/'+localStorage.getItem("token"))
+        .then(res1=>{
+            WorkOpsApi.get('/api/projects/userprojects/'+res1.data.email)
+            .then(res=>{
+                setProjectdata(res.data);
+                // console.log(projectdata);
+            });
         });
     },[]);
     const dispatch = useDispatch();

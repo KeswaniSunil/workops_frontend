@@ -14,8 +14,10 @@ instance.interceptors.request.use(
         //So inside here we will modify the config object to include token in header.
         const token=await localStorage.getItem("token");
         if(token){
+            // console.log("INNN");
             config.headers.Authorization=`Bearer ${token}`;
         }
+        // console.log(config);
         return config;
     },
     (err)=>{

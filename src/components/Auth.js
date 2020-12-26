@@ -22,6 +22,7 @@ const Auth = ({mode,headerText,errorMessage,onSubmit,history}) => {
         //way 2:
         onSubmit(email,password,dispatch)
         .then(res=>{
+            console.log(errorMessage);
             if(res){
                 //option 1:
                 // window.location = "/signin"

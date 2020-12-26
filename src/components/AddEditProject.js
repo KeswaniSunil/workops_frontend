@@ -52,7 +52,7 @@ const AddEditProject = ({id}) => {
                     }
                 })
                 .catch(e=>{
-                    alert("Error");
+                    // alert("Error"+e.response.data);
                 })
             })
         }

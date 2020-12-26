@@ -40,7 +40,9 @@ export const signup=async (email,password,dispatch)=>{
         return true;
     } catch (error) {
         // console.log("Err= "+error.response.data.error);
-        dispatch({type:actionTypes.ERROR,payload:error.response.data.error});
+        if(error.response.data!=undefined){
+            dispatch({type:actionTypes.ERROR,payload:error.response.data});
+        }
         return false;
     }
 };
@@ -58,8 +60,10 @@ export const signin=async (email,password,dispatch)=>{
         return true;
     } catch (error) {
         // console.log("Here");
-        console.log(error);
-        dispatch({type:actionTypes.ERROR,payload:error.response.data.error});
+        // console.log(error.response.data);
+        if(error.response.data!=undefined){
+            dispatch({type:actionTypes.ERROR,payload:error.response.data});
+        }
         return false;
     }
 };

@@ -17,7 +17,7 @@ const PublicRoutes = ({
                     alert("Already Signed In");
                 return (
                     <Redirect
-                    to="/dashboard"
+                    to="/projects"
                     />
                 );
                 }

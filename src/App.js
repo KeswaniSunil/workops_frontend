@@ -5,7 +5,6 @@ import SignIn from './components/SignIn';
 import PageNotFound from './components/PageNotFound.jsx';
 import SignUp from './components/SignUp';
 import Paperbase from './components/Paperbase.js';
-import Dashboard from './components/Dashboard.js';
 import PrivateRoutes from "./PrivateRoutes.js"
 import PublicRoutes from "./PublicRoutes.js"
 import Logout from './components/Logout.js';
@@ -44,7 +43,6 @@ function App() {
           <PublicRoutes path="/signin" exact component={SignIn} />          
           <PublicRoutes path="/signup" exact component={SignUp} />
           <PublicRoutes path="/forgotpassword" exact component={ForgotPassword} />
-          {/* <PrivateRoutes path="/dashboard" exact component={Paperbase} /> */}
           <PrivateRoutes path="/dashboard" exact component={Paperbase} />
           <PrivateRoutes path="/projects" exact component={Paperbase} />
           <PrivateRoutes path="/backlog" exact component={Paperbase} />

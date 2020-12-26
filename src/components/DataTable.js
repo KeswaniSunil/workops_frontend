@@ -25,7 +25,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { Link} from 'react-router-dom';
 import WorkOpsApi from "../api/WorkOpsBackend";
 import {useSelector} from 'react-redux';
-
+import EditIcon from '@material-ui/icons/Edit';
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -182,7 +182,7 @@ import {useSelector} from 'react-redux';
     },
   }));
 
-const DataTable = ({rows,headCells,mode,generate}) => {
+const DataTable = ({rows,headCells,mode,generate,onEdit,componentIdForComponentIssuetype}) => {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -207,6 +207,14 @@ const DataTable = ({rows,headCells,mode,generate}) => {
             setSelected(newSelecteds);
           }
           else if(mode==='components'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='componentIssue'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='backlog'){
             const newSelecteds = rows.map((n) => n.id);
             setSelected(newSelecteds);
           }
@@ -244,7 +252,7 @@ const DataTable = ({rows,headCells,mode,generate}) => {
         if(mode==="projectteam"){
           // console.log(selected);
           selected.map(s=>{
-            console.log(projectId+" "+s);
+            // console.log(projectId+" "+s);
             WorkOpsApi.delete("/api/projectteam/"+projectId+"/"+s)
             .then(res=>{
               if(res){
@@ -256,12 +264,46 @@ const DataTable = ({rows,headCells,mode,generate}) => {
             })
           });
         }
-        if(mode==="components"){
+        else if(mode==="components"){
           // console.log(selected);
           selected.map(s=>
             {
             // console.log(s)
             WorkOpsApi.delete("/api/components/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+        else if(mode==="componentIssue"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(componentIdForComponentIssuetype+" "+s);
+            WorkOpsApi.delete("/api/componentissue/"+componentIdForComponentIssuetype+"/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+        else if(mode==="backlog"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(componentIdForComponentIssuetype+" "+s);
+            WorkOpsApi.delete("/api/issues/"+s)
             .then(res=>{
               if(res){
                 // console.log(res);
@@ -291,6 +333,12 @@ const DataTable = ({rows,headCells,mode,generate}) => {
       const isSelected = (name) => selected.indexOf(name) !== -1;
     
       const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+
+      const issueTypeIcons=["https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype","https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10318&avatarType=issuetype",
+                              "https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype","https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10303&avatarType=issuetype",
+                              "https://dreamcompany98.atlassian.net/images/icons/issuetypes/epic.svg"
+                            ]
+      const issuePriorityString="https://dreamcompany98.atlassian.net/images/icons/priorities/";
 
     return (
         <div className={classes.root}>
@@ -330,49 +378,50 @@ const DataTable = ({rows,headCells,mode,generate}) => {
                         />
                         {mode==='backlog' &&
                             <TableBody>
-                                {stableSort(rows, getComparator(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.id);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-                
-                                    return (
-                                    <TableRow
-                                        hover
-                                        role="checkbox"
-                                        aria-checked={isItemSelected}
-                                        tabIndex={-1}
-                                        key={row.id}
-                                        selected={isItemSelected}
+                            {stableSort(rows, getComparator(order, orderBy))
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((row, index) => {
+                                const isItemSelected = isSelected(row.id);
+                                const labelId = `enhanced-table-checkbox-${index}`;
+            
+                                return (
+                                <TableRow
+                                    hover
+                                    role="checkbox"
+                                    aria-checked={isItemSelected}
+                                    tabIndex={-1}
+                                    key={row.id}
+                                    selected={isItemSelected}
+                                >
+                                    <TableCell padding="checkbox">
+                                        <Checkbox
+                                            onClick={(event) => handleClick(event, row.id)}
+                                            checked={isItemSelected}
+                                            inputProps={{ 'aria-labelledby': labelId }}
+                                        />
+                                    </TableCell>
+                                    <TableCell component="th" id={labelId} scope="row" padding="none"
+                                        // style={{display:"flex",alignItems:"center"}}
                                     >
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                                onClick={(event) => handleClick(event, row.id)}
-                                                checked={isItemSelected}
-                                                inputProps={{ 'aria-labelledby': labelId }}
-                                            />
-                                        </TableCell>
-                                        <TableCell component="th" id={labelId} scope="row" padding="none"
-                                            // style={{display:"flex",alignItems:"center"}}
-                                        >
-                                            <img src={row.typeIcon} style={{paddingRight:5}}/>
-                                            <span>{row.type}</span>
-                                        </TableCell>
-                                        <TableCell align="left">{row.desc}</TableCell>
-                                        <TableCell align="left">{row.key}</TableCell>
-                                        <TableCell align="left">{row.status}</TableCell>
-                                        <TableCell align="center">
-                                            <img src={row.priority} height="20"/>
-                                        </TableCell>
-                                    </TableRow>
-                                    );
-                                })}
-                                {/* {emptyRows > 0 && (
-                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                                    <TableCell colSpan={7} />
+                                        <img src={row.issuetypeBean.name==='Story' ? issueTypeIcons[0] : (row.issuetypeBean.name==='Task' ? issueTypeIcons[1] : (row.issuetypeBean.name==='Sub Task' ? issueTypeIcons[2] : (row.issuetypeBean.name==='Bug' ? issueTypeIcons[3]:issueTypeIcons[4] )) )} style={{paddingRight:5}}/>
+                                        <span>{row.issuetypeBean.name}</span>
+                                    </TableCell>
+                                    <TableCell align="left">{row.name}</TableCell>
+                                    <TableCell align="left">{row.description}</TableCell>
+                                    <TableCell align="left">{row.issuestatus.name}</TableCell>
+                                    <TableCell align="center">
+                                    <img src={row.issuepriorityBean.name==='lowest' ? issuePriorityString+"lowest.svg" : (row.issuepriorityBean.name==='low' ? issuePriorityString+"low.svg" : (row.issuepriorityBean.name==='medium' ? issuePriorityString+"medium.svg" : (row.issuepriorityBean.name==='high' ? issuePriorityString+"high.svg":issuePriorityString+"highest.svg" ) ) )} height="20" style={{paddingRight:5}}/>
+
+                                    </TableCell>
                                 </TableRow>
-                                )} */}
-                            </TableBody>
+                                );
+                            })}
+                            {/* {emptyRows > 0 && (
+                            <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                <TableCell colSpan={7} />
+                            </TableRow>
+                            )} */}
+                        </TableBody>
                         }
                         {mode==='components' &&
                             <TableBody>
@@ -405,6 +454,58 @@ const DataTable = ({rows,headCells,mode,generate}) => {
                                         </TableCell>
                                         <TableCell align="left">{row.description}</TableCell>
                                         <TableCell align="left">{row.user.fullName}</TableCell>
+                                        <TableCell align="center">
+                                          <IconButton aria-label="delete" onClick={()=>{onEdit(row.id)}}>
+                                            <EditIcon/>
+                                          </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                                {/* {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={7} />
+                                </TableRow>
+                                )} */}
+                            </TableBody>
+                        }
+                        {mode==='componentIssue' &&
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                
+                                    return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.id}
+                                        selected={isItemSelected}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                onClick={(event) => handleClick(event, row.id)}
+                                                checked={isItemSelected}
+                                                inputProps={{ 'aria-labelledby': labelId }}
+                                            />
+                                        </TableCell>
+                                        <TableCell component="th" id={labelId} scope="row" padding="none"
+                                            // style={{display:"flex",alignItems:"center"}}
+                                        >
+                                            <img src={row.issuetypeBean.name==='Story' ? issueTypeIcons[0] : (row.issuetypeBean.name==='Task' ? issueTypeIcons[1] : (row.issuetypeBean.name==='Sub Task' ? issueTypeIcons[2] : (row.issuetypeBean.name==='Bug' ? issueTypeIcons[3]:issueTypeIcons[4] )) )} style={{paddingRight:5}}/>
+                                            <span>{row.issuetypeBean.name}</span>
+                                        </TableCell>
+                                        <TableCell align="left">{row.name}</TableCell>
+                                        <TableCell align="left">{row.description}</TableCell>
+                                        <TableCell align="left">{row.issuestatus.name}</TableCell>
+                                        <TableCell align="center">
+                                        <img src={row.issuepriorityBean.name==='lowest' ? issuePriorityString+"lowest.svg" : (row.issuepriorityBean.name==='low' ? issuePriorityString+"low.svg" : (row.issuepriorityBean.name==='medium' ? issuePriorityString+"medium.svg" : (row.issuepriorityBean.name==='high' ? issuePriorityString+"high.svg":issuePriorityString+"highest.svg" ) ) )} height="20" style={{paddingRight:5}}/>
+
+                                        </TableCell>
                                     </TableRow>
                                     );
                                 })}

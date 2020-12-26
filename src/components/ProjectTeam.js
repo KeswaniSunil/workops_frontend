@@ -20,6 +20,9 @@ const ProjectTeam = () => {
                 // console.log(rows.length);
                 setRows(res.data);             
             }
+            else{
+                setRows([]);
+            }
         });
     }
     useEffect(()=>{

@@ -18,19 +18,30 @@ const Components = () => {
 
     const {projectId}=useSelector(state=>state.ProjectReducer);
     const [rows,setRows]=useState([]);
+    const [editComponentId,setEditComponentId]=useState(undefined)
     const generate=()=>{
         WorkOpsApi.get('/api/components/projects/'+projectId)
         .then(res=>{
-            // console.log(res);
-            if(res.data[0].id!==undefined){
+            if(res.data.length>0 && res.data[0].id!==undefined){
                 // console.log(res);
                 // console.log(rows.length);
                 setRows(res.data);             
             }
+            else{
+                setRows([]);
+            }
         });
     }
+    const editMode=(cid)=>{
+        setEditComponentId(cid);
+        handleShow();
+    }
+    const addMode=()=>{
+        setEditComponentId(undefined);
+        handleShow();
+    }
     useEffect(()=>{
-        // console.log("Hey");
+        console.log("Component"+projectId);
         generate();
     },[]);
 
@@ -52,9 +63,10 @@ const Components = () => {
 
 // ]
   const headCells = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Name' ,width:"25%"},
-    { id: 'desc', numeric: false, disablePadding: true, label: 'Description',width:"45%" },
+    { id: 'name', numeric: false, disablePadding: true, label: 'Name' ,width:"20%"},
+    { id: 'desc', numeric: false, disablePadding: true, label: 'Description',width:"40%" },
     { id: 'lead', numeric: true, disablePadding: false, label: 'Component Lead',width:"20%" },
+    { id: 'edit', numeric: true, disablePadding: false, label: 'Edit',width:"10%" },
   ];
 
     const [show, setShow] = useState(false);
@@ -78,12 +90,12 @@ const Components = () => {
             <div className="components__content">
                 <div className="components__content__addcomponent">
                     <div>
-                        <button type="button" onClick={handleShow}>
+                        <button type="button" onClick={addMode}>
                             Create New
                         </button>
                     </div>
                 </div>
-                <DataTable mode="components" rows={rows} headCells={headCells} generate={generate}/>                
+                <DataTable mode="components" rows={rows} headCells={headCells} generate={generate} onEdit={editMode}/>                
                 <Modal
                     show={show}
                     onHide={handleClose}
@@ -96,10 +108,10 @@ const Components = () => {
                     // animation={true}
                 >
                     <Modal.Header closeButton >
-                    <Modal.Title>Add Component</Modal.Title>
+                    <Modal.Title>Component</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                    <AddEditComponent onHandleClose={handleClose}/>
+                    <AddEditComponent onHandleClose={handleClose} id={editComponentId}/>
                     </Modal.Body>
                     {/* <Modal.Footer>
                     <Button style={{width:"15%"}} variant="secondary" onClick={handleClose}>

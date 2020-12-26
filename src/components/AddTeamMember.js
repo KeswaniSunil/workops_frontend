@@ -41,7 +41,7 @@ const AddTeamMember = ({onHandleClose}) => {
                     <label>
                         Email
                     </label>
-                    <input type="email" required value={email}
+                    <input type="email" required
                     //  placeholder="Enter name"
                     value={email}
                     onChange={(e)=>{setEmail(e.target.value)}}

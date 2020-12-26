@@ -66,19 +66,22 @@ const styles = (theme) => ({
 
 function Navigator(props) {
 
-  const [project,setProject]=useState(null);
+  const [project,setProject]=useState({name:"",key:""});
   const {projectId}=useSelector(state=>state.ProjectReducer);
+  const {role}=useSelector(state=>state.ProjectReducer);
+
   const imageNum=Math.floor(Math.random() * Math.floor(3));
   useEffect(()=>{
-    WorkOpsApi.get('/api/projects/'+projectId)
-    .then(res=>{
-        // console.log("Calling Proj id= "+projectId);
-        setProject(res.data);
-        // console.log(res.data);
-    });
+    if(projectId!=null){
+      WorkOpsApi.get('/api/projects/'+projectId)
+      .then(res=>{
+          // console.log("Calling Proj id= "+projectId);
+          setProject(res.data);
+      });
+    }
   },[projectId]);
   const { classes, ...other } = props;
-  const [active,setActive]=useState("Dashboard");
+  const [active,setActive]=useState("Projects");
 
   const head=[
     {

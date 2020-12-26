@@ -26,7 +26,10 @@ const AddEditComponent = ({id,onHandleClose}) => {
         if(id!==undefined){
             WorkOpsApi.get("/api/components/"+id)
             .then(res=>{
-                setComponent(res.data);
+                initialprojecstate.name=res.data.name;
+                initialprojecstate.description=res.data.description;
+                initialprojecstate.lead=res.data.user.email;
+                setComponent(initialprojecstate);
             })
         }
         getTeam();
@@ -34,12 +37,12 @@ const AddEditComponent = ({id,onHandleClose}) => {
     const handleSubmit=(e)=>{
         e.preventDefault();
         if(id===undefined){
-            // console.log("In");
             WorkOpsApi.get("/api/userprofiles/"+component.lead)
             .then(res=>{
                if(res){
                 WorkOpsApi.get("/api/projects/"+projectId)
                 .then(res1=>{
+                    console.log("up= "+res.data);
                     WorkOpsApi.post("/api/components/",{
                         name:component.name,
                         description:component.description,
@@ -47,14 +50,15 @@ const AddEditComponent = ({id,onHandleClose}) => {
                         user:res.data
                     })
                     .then(res2=>{
-                        console.log(component);
-                        console.log(res1.data);                        
-                        console.log(res.data);
+                        // console.log(component);
+                        // console.log(res1.data);                        
+                        // console.log(res.data);
                         if(res2){
                             onHandleClose();
                         }
                     })
                     .catch(e=>{
+                        console.log(e);
                         alert("Error while Adding component");
                     })
                 });
@@ -67,6 +71,9 @@ const AddEditComponent = ({id,onHandleClose}) => {
                if(res){
                 WorkOpsApi.get("/api/projects/"+projectId)
                 .then(res1=>{
+                        //                     console.log(component);
+                        // console.log(res1.data);                        
+                        // console.log(res.data+" "+component.lead);
                     WorkOpsApi.put("/api/components/",{
                         id:id,
                         name:component.name,
@@ -75,11 +82,15 @@ const AddEditComponent = ({id,onHandleClose}) => {
                         user:res.data
                     })
                     .then(res2=>{
+                        // console.log(component);
+                        // console.log(res1.data);                        
+                        // console.log(res.data);
                         if(res2){
                             onHandleClose();
                         }
                     })
                     .catch(e=>{
+                        // console.log(e);
                         alert("Error while updating component");
                     })
                 });
@@ -116,6 +127,7 @@ const AddEditComponent = ({id,onHandleClose}) => {
                     <select value={component.lead}
                         onChange={(e)=>{setComponent({...component,lead:e.target.value})}}                    
                     >
+                        <option value=""></option>
                         {
                             teamData.map((t)=>
                                 <option value={t.id.user.email}>{t.id.user.fullName}</option>
