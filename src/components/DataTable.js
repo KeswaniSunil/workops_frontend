@@ -22,7 +22,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-  
+import { Link} from 'react-router-dom';
+import WorkOpsApi from "../api/WorkOpsBackend";
+import {useSelector} from 'react-redux';
+import EditIcon from '@material-ui/icons/Edit';
+
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
       return -1;
@@ -127,32 +131,32 @@ import FilterListIcon from '@material-ui/icons/FilterList';
     },
   }));
   
-  const EnhancedTableToolbar = (props) => {
-    const classes = useToolbarStyles();
-    const { numSelected } = props;
+  // const EnhancedTableToolbar = (props) => {
+  //   const classes = useToolbarStyles();
+  //   const { numSelected } = props;
   
-    return (
-      <div className="selectedrows">
-        {numSelected > 0 &&
-          <div className="selectedrows__title">
-            {numSelected} selected
-          </div>
-        }
+  //   return (
+  //     <div className="selectedrows">
+  //       {numSelected > 0 &&
+  //         <div className="selectedrows__title">
+  //           {numSelected} selected
+  //         </div>
+  //       }
   
-        {numSelected > 0 &&
-          <div title="Delete">
-            <IconButton aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </div>
-        }
-      </div>
-    );
-  };
+  //       {numSelected > 0 &&
+  //         <div title="Delete">
+  //           <IconButton aria-label="delete" onClick={()=>{deleteRows}}>
+  //             <DeleteIcon />
+  //           </IconButton>
+  //         </div>
+  //       }
+  //     </div>
+  //   );
+  // };
   
-  EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-  };
+  // EnhancedTableToolbar.propTypes = {
+  //   numSelected: PropTypes.number.isRequired,
+  // };
   
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -178,7 +182,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
     },
   }));
 
-const DataTable = ({rows,headCells,mode}) => {
+const DataTable = ({rows,headCells,mode,generate,onEdit,componentIdForComponentIssuetype,versionIdForVersionIssuetype, sprintIdForSprintIssuetype}) => {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -186,6 +190,7 @@ const DataTable = ({rows,headCells,mode}) => {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const {projectId}=useSelector(state=>state.ProjectReducer);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -195,8 +200,41 @@ const DataTable = ({rows,headCells,mode}) => {
     
       const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-          const newSelecteds = rows.map((n) => n.name);
-          setSelected(newSelecteds);
+          if(mode==='projectteam'){
+            // console.log("rows= "+rows);
+            const newSelecteds = rows.map((n) => n.id.user.email);
+            // console.log(newSelecteds);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='components'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='componentIssue'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='versions'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='versionIssue'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='sprints'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else if(mode==='sprintIssue'){
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+          }
+          else{
+            const newSelecteds = rows.map((n) => n.name);
+            setSelected(newSelecteds);
+          }
+
           return;
         }
         setSelected([]);
@@ -218,10 +256,139 @@ const DataTable = ({rows,headCells,mode}) => {
             selected.slice(selectedIndex + 1),
           );
         }
-    
+        
         setSelected(newSelected);
       };
     
+      const deleteRows=()=>{
+        if(mode==="projectteam"){
+          // console.log(selected);
+          selected.map(s=>{
+            console.log(projectId+" "+s);
+            WorkOpsApi.delete("/api/projectteam/"+projectId+"/"+s)
+            .then(res=>{
+              if(res){
+                console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          });
+        }
+        else if(mode==="components"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(s)
+            WorkOpsApi.delete("/api/components/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+        
+        else if(mode==="componentIssue"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(componentIdForComponentIssuetype+" "+s);
+            WorkOpsApi.delete("/api/componentissue/"+componentIdForComponentIssuetype+"/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+
+        else if(mode==="versions"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(s)
+            WorkOpsApi.delete("/api/versions/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+
+        else if(mode==="versionIssue"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(versionIdForVersionIssuetype+" "+s);
+            WorkOpsApi.delete("/api/issueversion/"+versionIdForVersionIssuetype+"/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+
+        else if(mode==="sprints"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log(s)
+            WorkOpsApi.delete("/api/sprint/"+s)
+            .then(res=>{
+              if(res){
+                // console.log(res);
+                generate();
+                setSelected([]);
+                return;
+              } 
+            })
+          }
+          );
+        }
+
+        else if(mode==="sprintIssue"){
+          // console.log(selected);
+          selected.map(s=>
+            {
+            // console.log("Issue "+s);
+            WorkOpsApi.get("/api/issues/"+s)
+            .then(resIss=>{
+              resIss.data.sprint=null;
+              WorkOpsApi.put("/api/issues",resIss.data)
+              .then(res=>{
+                if(res){
+                  // console.log(res);
+                  generate();
+                  setSelected([]);
+                  return;
+                } 
+              })
+            })
+          }
+          );
+        }
+      }
+
       const handleChangePage = (event, newPage) => {
         setPage(newPage);
       };
@@ -239,10 +406,32 @@ const DataTable = ({rows,headCells,mode}) => {
     
       const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+      const issueTypeIcons=["https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype","https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10318&avatarType=issuetype",
+                              "https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype","https://dreamcompany98.atlassian.net/secure/viewavatar?size=medium&avatarId=10303&avatarType=issuetype",
+                              "https://dreamcompany98.atlassian.net/images/icons/issuetypes/epic.svg"
+                            ]
+      const issuePriorityString="https://dreamcompany98.atlassian.net/images/icons/priorities/";
+
+
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                    <EnhancedTableToolbar numSelected={selected.length} />
+                    {/* <EnhancedTableToolbar numSelected={selected.length}/> */}
+                    <div className="selectedrows">
+                      {selected.length > 0 &&
+                        <div className="selectedrows__title">
+                          {selected.length} selected
+                        </div>
+                      }
+                
+                      {selected.length > 0 &&
+                        <div title="Delete">
+                          <IconButton aria-label="delete" onClick={deleteRows}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </div>
+                      }
+                    </div>
                     <TableContainer>
                         <Table
                         className={classes.table}
@@ -265,7 +454,7 @@ const DataTable = ({rows,headCells,mode}) => {
                                 {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.key);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                 
                                     return (
@@ -274,12 +463,12 @@ const DataTable = ({rows,headCells,mode}) => {
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.key}
+                                        key={row.id}
                                         selected={isItemSelected}
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
-                                                onClick={(event) => handleClick(event, row.key)}
+                                                onClick={(event) => handleClick(event, row.id)}
                                                 checked={isItemSelected}
                                                 inputProps={{ 'aria-labelledby': labelId }}
                                             />
@@ -292,18 +481,18 @@ const DataTable = ({rows,headCells,mode}) => {
                                         </TableCell>
                                         <TableCell align="left">{row.desc}</TableCell>
                                         <TableCell align="left">{row.key}</TableCell>
-                                        <TableCell align="left" style={{textTransform:"uppercase"}}>{row.status}</TableCell>
+                                        <TableCell align="left">{row.status}</TableCell>
                                         <TableCell align="center">
                                             <img src={row.priority} height="20"/>
                                         </TableCell>
                                     </TableRow>
                                     );
                                 })}
-                                {emptyRows > 0 && (
+                                {/* {emptyRows > 0 && (
                                 <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
                                     <TableCell colSpan={7} />
                                 </TableRow>
-                                )}
+                                )} */}
                             </TableBody>
                         }
                         {mode==='components' &&
@@ -311,7 +500,7 @@ const DataTable = ({rows,headCells,mode}) => {
                                 {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                 
                                     return (
@@ -320,23 +509,73 @@ const DataTable = ({rows,headCells,mode}) => {
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.name}
+                                        key={row.id}
                                         selected={isItemSelected}
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
-                                                onClick={(event) => handleClick(event, row.name)}
+                                                onClick={(event) => handleClick(event, row.id)}
                                                 checked={isItemSelected}
                                                 inputProps={{ 'aria-labelledby': labelId }}
                                             />
                                         </TableCell>
-                                        <TableCell component="th" id={labelId} scope="row" padding="none">
-                                            {row.name}
+                                        <TableCell component={Link} to={"/components/"+row.id} id={labelId} scope="row" padding="none">
+                                            {/* <Link to={"/components/"+row.id}> */}
+                                              {row.name}
+                                            {/* </Link> */}
                                         </TableCell>
-                                        <TableCell align="left">{row.desc}</TableCell>
-                                        <TableCell align="left">{row.lead}</TableCell>
-                                        <TableCell align="left">
-                                            {row.assignee}
+                                        <TableCell align="left">{row.description}</TableCell>
+                                        <TableCell align="left">{row.user.fullName}</TableCell>
+                                        <TableCell align="center">
+                                          <IconButton aria-label="delete" onClick={()=>{onEdit(row.id)}}>
+                                            <EditIcon/>
+                                          </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                                {/* {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={7} />
+                                </TableRow>
+                                )} */}
+                            </TableBody>
+                        }
+                        {mode==='componentIssue' &&
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                
+                                    return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.id}
+                                        selected={isItemSelected}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                onClick={(event) => handleClick(event, row.id)}
+                                                checked={isItemSelected}
+                                                inputProps={{ 'aria-labelledby': labelId }}
+                                            />
+                                        </TableCell>
+                                        <TableCell component="th" id={labelId} scope="row" padding="none"
+                                            // style={{display:"flex",alignItems:"center"}}
+                                        >
+                                            <img src={row.issuetypeBean.name==='Story' ? issueTypeIcons[0] : (row.issuetypeBean.name==='Task' ? issueTypeIcons[1] : (row.issuetypeBean.name==='Sub Task' ? issueTypeIcons[2] : (row.issuetypeBean.name==='Bug' ? issueTypeIcons[3]:issueTypeIcons[4] )) )} style={{paddingRight:5}}/>
+                                            <span>{row.issuetypeBean.name}</span>
+                                        </TableCell>
+                                        <TableCell align="left">{row.description}</TableCell>
+                                        <TableCell align="left">{row.issuestatus.name}</TableCell>
+                                        <TableCell align="center">
+                                        <img src={row.issuepriorityBean.name==='lowest' ? issuePriorityString+"lowest.svg" : (row.issuepriorityBean.name==='low' ? issuePriorityString+"low.svg" : (row.issuepriorityBean.name==='medium' ? issuePriorityString+"medium.svg" : (row.issuepriorityBean.name==='high' ? issuePriorityString+"high.svg":issuePriorityString+"highest.svg" ) ) )} height="20" style={{paddingRight:5}}/>
+
                                         </TableCell>
                                     </TableRow>
                                     );
@@ -353,32 +592,31 @@ const DataTable = ({rows,headCells,mode}) => {
                                 {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.email);
+                                    const isItemSelected = isSelected(row.id.user.email);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                 
                                     return (
                                     <TableRow
                                         hover
-                                        onClick={(event) => handleClick(event, row.email)}
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.email}
+                                        key={row.id.user.email}
                                         selected={isItemSelected}
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
+                                                onClick={(event) => handleClick(event, row.id.user.email)}
                                                 checked={isItemSelected}
                                                 inputProps={{ 'aria-labelledby': labelId }}
                                             />
                                         </TableCell>
                                         <TableCell component="th" id={labelId} scope="row" padding="none"
                                         >
-                                        {row.name}
+                                        {row.id.user.fullName}
                                         </TableCell>
-                                        <TableCell align="left">{row.email}</TableCell>
-                                        <TableCell align="left">{row.team}</TableCell>
-                                        <TableCell align="left">{row.role}</TableCell>
+                                        <TableCell align="left">{row.id.user.email}</TableCell>
+                                        <TableCell align="left">{row.role.role}</TableCell>
                                     </TableRow>
                                     );
                                 })}
@@ -395,13 +633,12 @@ const DataTable = ({rows,headCells,mode}) => {
                                 {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                 
                                     return (
                                     <TableRow
                                         hover
-                                        onClick={(event) => handleClick(event, row.name)}
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
@@ -410,18 +647,22 @@ const DataTable = ({rows,headCells,mode}) => {
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
+                                                onClick={(event) => handleClick(event, row.id)}
                                                 checked={isItemSelected}
                                                 inputProps={{ 'aria-labelledby': labelId }}
                                             />
                                         </TableCell>
-                                        <TableCell component="th" id={labelId} scope="row" padding="none"
-                                        >
+                                        <TableCell component={Link} to={"/sprints/"+row.id} id={labelId} scope="row" padding="none">
                                         {row.name}
                                         </TableCell>
-                                        <TableCell align="left">{row.duration}</TableCell>
-                                        <TableCell align="left">{row.startdate}</TableCell>
-                                        <TableCell align="left">{row.enddate}</TableCell>
-                                        <TableCell align="left">{row.sprintgoal}</TableCell>
+                                        <TableCell align="left">{new Date(row.startdate).toLocaleDateString('en-CA')}</TableCell>
+                                        <TableCell align="left">{new Date(row.enddate).toLocaleDateString('en-CA')}</TableCell>
+                                        <TableCell align="left">{row.goal}</TableCell>
+                                        <TableCell align="center">
+                                          <IconButton aria-label="delete" onClick={()=>{onEdit(row.id)}}>
+                                            <EditIcon/>
+                                          </IconButton>
+                                        </TableCell>
                                     </TableRow>
                                     );
                                 })}
@@ -433,18 +674,66 @@ const DataTable = ({rows,headCells,mode}) => {
                             </TableBody>
                         }
 
-                        {mode==='versions' &&
+                        {mode==='sprintIssue' &&
                             <TableBody>
                                 {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                 
                                     return (
                                     <TableRow
                                         hover
-                                        onClick={(event) => handleClick(event, row.name)}
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.id}
+                                        selected={isItemSelected}
+                                    >
+                                      <TableCell padding="checkbox">
+                                          <Checkbox
+                                              onClick={(event) => handleClick(event, row.id)}
+                                              checked={isItemSelected}
+                                              inputProps={{ 'aria-labelledby': labelId }}
+                                          />
+                                      </TableCell>
+                                      <TableCell component="th" id={labelId} scope="row" padding="none"
+                                          // style={{display:"flex",alignItems:"center"}}
+                                      >
+                                          <img src={row.issuetypeBean.name==='Story' ? issueTypeIcons[0] : (row.issuetypeBean.name==='Task' ? issueTypeIcons[1] : (row.issuetypeBean.name==='Sub Task' ? issueTypeIcons[2] : (row.issuetypeBean.name==='Bug' ? issueTypeIcons[3]:issueTypeIcons[4] )) )} style={{paddingRight:5}}/>
+                                          <span>{row.issuetypeBean.name}</span>
+                                      </TableCell>
+                                      <TableCell align="left">{row.name}</TableCell>
+                                      <TableCell align="left">{row.description}</TableCell>
+                                      <TableCell align="left">{row.issuestatus.name}</TableCell>
+                                      <TableCell align="center">
+                                      <img src={row.issuepriorityBean.name==='lowest' ? issuePriorityString+"lowest.svg" : (row.issuepriorityBean.name==='low' ? issuePriorityString+"low.svg" : (row.issuepriorityBean.name==='medium' ? issuePriorityString+"medium.svg" : (row.issuepriorityBean.name==='high' ? issuePriorityString+"high.svg":issuePriorityString+"highest.svg" ) ) )} height="20" style={{paddingRight:5}}/>
+
+                                      </TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                                {/* {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={7} />
+                                </TableRow>
+                                )} */}
+                            </TableBody>
+                       }
+
+
+                        {mode==='versions' &&
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                
+                                    return (
+                                    <TableRow
+                                        hover
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
@@ -453,16 +742,68 @@ const DataTable = ({rows,headCells,mode}) => {
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
+                                                onClick={(event) => handleClick(event, row.id)}
                                                 checked={isItemSelected}
                                                 inputProps={{ 'aria-labelledby': labelId }}
                                             />
                                         </TableCell>
-                                        <TableCell component="th" id={labelId} scope="row" padding="none"
-                                        >
+                                        <TableCell component={Link} to={"/versions/"+row.id} id={labelId} scope="row" padding="none">
                                         {row.name}
                                         </TableCell>
-                                        <TableCell align="left">{row.releasedate}</TableCell>
+                                        <TableCell align="left">{new Date(row.releasedate).toLocaleDateString('en-CA')}</TableCell>
                                         <TableCell align="left">{row.description}</TableCell>
+                                        <TableCell align="center">
+                                          <IconButton aria-label="delete" onClick={()=>{onEdit(row.id)}}>
+                                            <EditIcon/>
+                                          </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                                {/* {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={7} />
+                                </TableRow>
+                                )} */}
+                            </TableBody>
+                        }
+                        {mode==='versionIssue' &&
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                
+                                    return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.id}
+                                        selected={isItemSelected}
+                                    >
+                                      <TableCell padding="checkbox">
+                                          <Checkbox
+                                              onClick={(event) => handleClick(event, row.id)}
+                                              checked={isItemSelected}
+                                              inputProps={{ 'aria-labelledby': labelId }}
+                                          />
+                                      </TableCell>
+                                      <TableCell component="th" id={labelId} scope="row" padding="none"
+                                          // style={{display:"flex",alignItems:"center"}}
+                                      >
+                                          <img src={row.issuetypeBean.name==='Story' ? issueTypeIcons[0] : (row.issuetypeBean.name==='Task' ? issueTypeIcons[1] : (row.issuetypeBean.name==='Sub Task' ? issueTypeIcons[2] : (row.issuetypeBean.name==='Bug' ? issueTypeIcons[3]:issueTypeIcons[4] )) )} style={{paddingRight:5}}/>
+                                          <span>{row.issuetypeBean.name}</span>
+                                      </TableCell>
+                                      <TableCell align="left">{row.name}</TableCell>
+                                      <TableCell align="left">{row.description}</TableCell>
+                                      <TableCell align="left">{row.issuestatus.name}</TableCell>
+                                      <TableCell align="center">
+                                      <img src={row.issuepriorityBean.name==='lowest' ? issuePriorityString+"lowest.svg" : (row.issuepriorityBean.name==='low' ? issuePriorityString+"low.svg" : (row.issuepriorityBean.name==='medium' ? issuePriorityString+"medium.svg" : (row.issuepriorityBean.name==='high' ? issuePriorityString+"high.svg":issuePriorityString+"highest.svg" ) ) )} height="20" style={{paddingRight:5}}/>
+
+                                      </TableCell>
                                     </TableRow>
                                     );
                                 })}

@@ -1,7 +1,6 @@
 
 import WorkOpsApi from "../api/WorkOpsBackend";
 // import Navigate from "../components/Navigate";
-import {customNavigation} from "../components/SignIn";
 // import React from 'react';
 export const actionTypes={
     ERROR : 'ERROR',
@@ -32,7 +31,7 @@ export const signup=async (email,password,dispatch)=>{
         // const response=await TrackerApi.post('/signup',{email:email,password:password}); is same as
         // console.log("Email= "+email);
         // console.log("Password= "+password);
-        const response=await WorkOpsApi.post('/signup',{email,password});
+        const response=await WorkOpsApi.post('/api/signup',{email,password});
         // console.log("Response= "+response.data);
         await localStorage.setItem("token",response.data.token);
         dispatch({type:actionTypes.SIGNUP_SIGNIN,payload:response.data.token});
@@ -40,7 +39,7 @@ export const signup=async (email,password,dispatch)=>{
         // <Navigate path="/dashboard"/>
         return true;
     } catch (error) {
-        // console.log("Err= "+error.response.data.error);
+        console.log("Err= "+error.response.data.error);
         dispatch({type:actionTypes.ERROR,payload:error.response.data.error});
         return false;
     }
@@ -51,13 +50,15 @@ export const signin=async (email,password,dispatch)=>{
     try {
         // const response=await TrackerApi.post('/signup',{email:email,password:password}); is same as
         // console.log(email+" - "+password);
-        const response=await WorkOpsApi.post('/signin',{email,password});
-        // console.log("called 1");        
+        const response=await WorkOpsApi.post('/api/signin',{email,password});
+        // console.log("called 1");
+        // console.log(response);        
         await localStorage.setItem("token",response.data.token);
         dispatch({type:actionTypes.SIGNUP_SIGNIN,payload:response.data.token});
         return true;
     } catch (error) {
         // console.log("Here");
+        console.log(error);
         dispatch({type:actionTypes.ERROR,payload:error.response.data.error});
         return false;
     }

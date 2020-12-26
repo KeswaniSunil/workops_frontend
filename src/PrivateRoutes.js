@@ -15,26 +15,33 @@ import VersionDetails from './components/VersionDetails';
 import IssueDetails from './components/IssueDetails';
 import AddIssue from './components/AddIssue';
 import UserProfile from './components/UserProfile';
+import VersionsIssue from './components/VersionsIssue.js';
+import SprintsIssue from './components/SprintsIssue.js';
+import ComponentsIssue from './components/ComponentsIssue.js';
+import {useSelector} from 'react-redux';
+
  const PrivateRoutes = ({
     component: Component,
     ...rest
   }) => {
-  const routeToComponentMapping=(pathname)=>{
-        console.log(pathname)
+    const {role}=useSelector(state=>state.ProjectReducer);
+  const routeToComponentMapping=(pathname,props)=>{
+        // console.log(pathname)
         if(pathname==='/dashboard') return <Dashboard />
         else if(pathname==='/projects') return <Projects/>
         else if(pathname==="/backlog") return <Backlog />
-        else if(pathname==="/projectsettings") return <ProjectSettings />
+        else if(pathname==="/projectsettings/:id") return <ProjectSettings {...props}/>;
         else if(pathname==="/projectteam") return <ProjectTeam/>
-        else if(pathname==="/createproject") return <CreateProject />
+        else if(pathname==="/createproject")return <CreateProject {...props}/>;
         else if(pathname==="/components") return <Components />
         else if(pathname==="/sprints") return <Sprints/>
-        else if(pathname==="/issues/:id") return <IssueDetails/>
-        else if(pathname==="/sprints/:id") return <SprintDetails/>
-        else if(pathname==="/addissue") return <AddIssue/>
+        else if(pathname==="/issues/:id") return <AddIssue id={props.match.params.id}/>
+        else if(pathname==="/issues/new") return <AddIssue/>
         else if(pathname==="/userprofile") return <UserProfile/>
         else if(pathname==="/versions") return <Versions/>
-        else if(pathname==="/versions/:id") return <VersionDetails/>
+        else if(pathname==="/versions/:id") return <VersionsIssue {...props}/>
+        else if(pathname==="/components/:id") return <ComponentsIssue {...props}/>
+        else if(pathname==="/sprints/:id") return <SprintsIssue {...props}/>
     }
     return (        
         <Route
@@ -44,7 +51,7 @@ import UserProfile from './components/UserProfile';
                     // console.log(props);
                 return <Component {...props} >
                     {/* <Dashboard/> */}
-                    {routeToComponentMapping(props.match.path)}
+                    {routeToComponentMapping(props.match.path,props)}
                 </Component>;
                 } else {
                     alert("You are not Signed In");

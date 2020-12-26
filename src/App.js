@@ -9,6 +9,7 @@ import Dashboard from './components/Dashboard.js';
 import PrivateRoutes from "./PrivateRoutes.js"
 import PublicRoutes from "./PublicRoutes.js"
 import Logout from './components/Logout.js';
+import ForgotPassword from './components/ForgotPassword';
 
 function App() {
 
@@ -42,21 +43,23 @@ function App() {
           <Route path="/" exact render={() => <Redirect to="/signin"/>} />
           <PublicRoutes path="/signin" exact component={SignIn} />          
           <PublicRoutes path="/signup" exact component={SignUp} />
+          <PublicRoutes path="/forgotpassword" exact component={ForgotPassword} />
           {/* <PrivateRoutes path="/dashboard" exact component={Paperbase} /> */}
           <PrivateRoutes path="/dashboard" exact component={Paperbase} />
           <PrivateRoutes path="/projects" exact component={Paperbase} />
           <PrivateRoutes path="/backlog" exact component={Paperbase} />
-          <PrivateRoutes path="/projectsettings" exact component={Paperbase} />
+          <PrivateRoutes path="/projectsettings/:id" exact component={Paperbase} />
           <PrivateRoutes path="/projectteam" exact component={Paperbase} />
           <PrivateRoutes path="/createproject" exact component={Paperbase} />
           <PrivateRoutes path="/components" exact component={Paperbase} />
           <PrivateRoutes path="/versions" exact component={Paperbase} />
           <PrivateRoutes path="/sprints" exact component={Paperbase} />
-          <Route path="/logout" exact  component={Logout} />
+          <PrivateRoutes path="/components/:id" exact component={Paperbase} />
+          <PrivateRoutes path="/issues/new" exact component={Paperbase} />
           <PrivateRoutes path="/issues/:id" exact component={Paperbase} />
           <PrivateRoutes path="/versions/:id" exact component={Paperbase} />
           <PrivateRoutes path="/sprints/:id" exact component={Paperbase} />
-          <PrivateRoutes path="/addissue" exact component={Paperbase} />
+          <Route path="/logout" exact  component={Logout} />
           <PrivateRoutes path="/userprofile" exact component={Paperbase} />
           
           <Route path="/*" component={PageNotFound} />

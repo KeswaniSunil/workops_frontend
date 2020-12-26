@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { Link} from 'react-router-dom';
@@ -7,8 +7,11 @@ import "../styles/CustomBreadcrumb.css";
 import AddEditUser from "./AddEditUser.js"
 import {Form ,Col , Button  } from 'react-bootstrap';
 
+import {useSelector} from 'react-redux';
+import WorkOpsApi from "../api/WorkOpsBackend";
 
-const UserSettings = () => {
+const UserSettings = ({id}) => {
+
     return (
         <div className="usersettings">
             <div className="usersettings__header">
